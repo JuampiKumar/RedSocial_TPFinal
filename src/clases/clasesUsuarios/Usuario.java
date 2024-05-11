@@ -10,7 +10,6 @@ import java.util.Objects;
 public class Usuario {
     //Atributos
     private int idUsuario;
-    private String nombre;
     private String userName;
     private String password;
     private String mail;
@@ -20,9 +19,8 @@ public class Usuario {
     private static int id = 0;
 
     //Constructor
-    public Usuario(String nombre, String userName, String password, String mail) {
+    public Usuario(String userName, String password, String mail) {
         this.idUsuario = id;
-        this.nombre = nombre;
         this.userName = userName;
         this.password = password;
         this.mail = mail;
@@ -42,14 +40,6 @@ public class Usuario {
 
     public int getIdUsuario() {
         return idUsuario;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getUserName() {

@@ -6,7 +6,7 @@ import enumeradores.Categoria;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class ContenidoInteractivo extends Contenido{
+public class ContenidoInteractivo extends Contenido{
     //Atributos
     private int likes;
     private List<Comentario> comentarios;
