@@ -8,21 +8,29 @@ import java.util.Objects;
 public abstract class Contenido implements Comparable<Contenido>{
     //Atributos
     private int idContenido;
+    private String usuario;
     private String titulo;
     private String contenido;
     private Categoria categoria;
     private Estado estado;
+    private static int idIncremental = 0;
 
     //Constructor
-    public Contenido(String titulo, String contenido, Categoria categoria) {
-        this.idContenido = idContenido;
+    public Contenido(String titulo, String contenido, Categoria categoria, String ususario) {
+        this.idContenido = idIncremental;
         this.titulo = titulo;
         this.contenido = contenido;
         this.categoria = categoria;
+        this.usuario = ususario;
         this.estado = Estado.ACTIVO;
+        idIncremental++;
     }
 
     //Getters y Setters
+    public String getUsuario() {
+        return usuario;
+    }
+
     public int getIdContenido() {
         return idContenido;
     }

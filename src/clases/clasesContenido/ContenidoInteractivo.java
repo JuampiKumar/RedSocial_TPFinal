@@ -12,8 +12,8 @@ public class ContenidoInteractivo extends Contenido{
     private List<Comentario> comentarios;
 
     //Constructor
-    public ContenidoInteractivo(String titulo, String contenido, Categoria categoria) {
-        super(titulo, contenido, categoria);
+    public ContenidoInteractivo(String titulo, String contenido, Categoria categoria, String usuario) {
+        super(titulo, contenido, categoria, usuario);
         this.likes = 0;
         this.comentarios = new LinkedList<>();
     }
