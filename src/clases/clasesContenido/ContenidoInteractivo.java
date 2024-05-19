@@ -1,6 +1,7 @@
 package clases.clasesContenido;
 
 import clases.Comentario;
+import clases.clasesUsuarios.Usuario;
 import enumeradores.Categoria;
 
 import java.util.LinkedList;
@@ -12,7 +13,7 @@ public class ContenidoInteractivo extends Contenido{
     private List<Comentario> comentarios;
 
     //Constructor
-    public ContenidoInteractivo(String titulo, String contenido, Categoria categoria, String usuario) {
+    public ContenidoInteractivo(String titulo, String contenido, Categoria categoria, Usuario usuario) {
         super(titulo, contenido, categoria, usuario);
         this.likes = 0;
         this.comentarios = new LinkedList<>();
@@ -25,5 +26,17 @@ public class ContenidoInteractivo extends Contenido{
 
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void agregarComentario(Comentario comentario){
+        this.comentarios.add(comentario);
+    }
+
+    public void eliminarComentario(Comentario comentario){
+        this.comentarios.remove(comentario);
     }
 }

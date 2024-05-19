@@ -1,9 +1,11 @@
 package clases.clasesUsuarios;
 
+import clases.clasesContenido.Contenido;
 import enumeradores.Estado;
 import enumeradores.Categoria;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,6 +17,8 @@ public class Usuario {
     private String mail;
     private Estado estado;
     private List<Categoria> preferencias;
+    private List<Contenido> publicados;
+    private List<Contenido> likeados;
 
     private static int id = 0;
 
@@ -25,6 +29,8 @@ public class Usuario {
         this.password = password;
         this.mail = mail;
         this.preferencias = new ArrayList<>();
+        this.publicados = new LinkedList<>();
+        this.likeados = new LinkedList<>();
         this.estado = Estado.ACTIVO;
         id++;
     }
@@ -70,12 +76,41 @@ public class Usuario {
         return preferencias;
     }
 
+    public List<Contenido> getPublicados() {
+        return publicados;
+    }
+
+    public List<Contenido> getLikeados() {
+        return likeados;
+    }
+
+    public void agregarPublicado(Contenido contenido){
+        this.publicados.add(contenido);
+    }
+
     //Metodos
+    public boolean buscarEnLikeado(Contenido contenido){
+        boolean flag = false;
+        if(this.likeados.contains(contenido)){
+            flag = true;
+        }
+        return flag;
+    }
+
+    public void agregarLikeado(Contenido contenido){
+        if(contenido != null){
+            this.likeados.add(contenido);
+        }
+    }
+
+    public void eliminarLikeado(Contenido contenido){
+        if(contenido != null){
+            this.likeados.remove(contenido);
+        }
+    }
 
 
     //Override
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

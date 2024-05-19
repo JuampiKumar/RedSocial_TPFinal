@@ -1,5 +1,6 @@
 package clases.clasesContenido;
 
+import clases.clasesUsuarios.Usuario;
 import enumeradores.Categoria;
 import enumeradores.Estado;
 
@@ -8,7 +9,7 @@ import java.util.Objects;
 public abstract class Contenido implements Comparable<Contenido>{
     //Atributos
     private int idContenido;
-    private String usuario;
+    private Usuario usuario;
     private String titulo;
     private String contenido;
     private Categoria categoria;
@@ -16,7 +17,7 @@ public abstract class Contenido implements Comparable<Contenido>{
     private static int idIncremental = 0;
 
     //Constructor
-    public Contenido(String titulo, String contenido, Categoria categoria, String ususario) {
+    public Contenido(String titulo, String contenido, Categoria categoria, Usuario ususario) {
         this.idContenido = idIncremental;
         this.titulo = titulo;
         this.contenido = contenido;
@@ -27,7 +28,7 @@ public abstract class Contenido implements Comparable<Contenido>{
     }
 
     //Getters y Setters
-    public String getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
@@ -91,6 +92,6 @@ public abstract class Contenido implements Comparable<Contenido>{
 
     @Override
     public int compareTo(Contenido o) {
-        return Integer.compare(this.idContenido,o.idContenido);
+        return Integer.compare(o.idContenido,this.idContenido);
     }
 }

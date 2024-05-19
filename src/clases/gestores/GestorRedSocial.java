@@ -2,10 +2,12 @@ package clases.gestores;
 
 import clases.Comentario;
 import clases.PanelGrafico;
-import clases.clasesContenido.Comunicado;
+import clases.clasesContenido.ContenidoNoInteractivo;
 import clases.clasesContenido.Contenido;
+import clases.clasesContenido.ContenidoInteractivo;
 import clases.clasesUsuarios.Usuario;
 import enumeradores.Categoria;
+import enumeradores.Estado;
 
 import java.util.*;
 
@@ -22,12 +24,22 @@ public class GestorRedSocial {
         this.comentarios = new LinkedList<>();
         this.usuarios = new LinkedList<>();
         this.contenidos = new TreeSet<>();
-        this.usuarios.add(new Usuario("diafir", "2002", "yahveh@gmail.com"));
-        this.contenidos.add(new Comunicado("Cómo cultivar tomates en casa", "Aprende paso a paso cómo cultivar tomates en tu jardín o terraza. Descubre los mejores consejos y trucos para obtener una cosecha abundante.", Categoria.ACTUALIDAD, "GreenThumb"));
-        this.contenidos.add(new Comunicado("Los beneficios del yoga para la salud mental", "Explora los efectos positivos del yoga en la salud mental. Descubre cómo esta práctica milenaria puede ayudarte a reducir el estrés, mejorar la concentración y encontrar la paz interior.", Categoria.ACTUALIDAD, "YogiPro"));
-        this.contenidos.add(new Comunicado("Entrevista exclusiva con Elon Musk", "Lee la entrevista exclusiva con Elon Musk, CEO de Tesla y SpaceX. Descubre sus ideas revolucionarias sobre el futuro de la tecnología, el espacio y la sostenibilidad.", Categoria.ACTUALIDAD, "TechEnthusiast"));
-        this.contenidos.add(new Comunicado("Reseña de la última película de Quentin Tarantino", "Descubre nuestra opinión sobre la última película de Quentin Tarantino. Analizamos la trama, los personajes y el estilo único del aclamado director.", Categoria.ACTUALIDAD, "Cinephile"));
-        this.contenidos.add(new Comunicado("Los mejores destinos para mochileros en América del Sur", "Explora los destinos más emocionantes y económicos para mochileros en América del Sur. Desde las playas paradisíacas de Brasil hasta las impresionantes montañas de Perú, tenemos todo cubierto.", Categoria.VIDEOJUEGOS, "WanderlustExplorer"));
+
+        Usuario usuario1 = new Usuario("diafir", "2002", "yahveh@gmail.com");
+        Comentario comentario1 = new Comentario(3, usuario1, Estado.ACTIVO, "jajajaj xd");
+        Comentario comentario2 = new Comentario(3, usuario1, Estado.ACTIVO, "tremendo pa");
+        Comentario comentario3 = new Comentario(3, usuario1, Estado.ACTIVO, "i cant belive it");
+        this.usuarios.add(usuario1);
+        this.contenidos.add(new ContenidoInteractivo("Cómo cultivar tomates en casa", "1 . Descubre los mejores consejos y trucos para obtener una cosecha abundante.", Categoria.ACTUALIDAD, usuario1));
+        this.contenidos.add(new ContenidoNoInteractivo("Los beneficios del yoga para la salud mental", "2 mental. Descubre cómo esta práctica milenaria puede ayudarte a reducir el estrés, mejorar la concentración y encontrar la paz interior.", Categoria.ACTUALIDAD, usuario1));
+        Contenido contenido1 = new ContenidoInteractivo("Entrevista exclusiva con Elon Musk", "3 . Descubre sus ideas revolucionarias sobre el futuro de la tecnología, el espacio y la sostenibilidad.", Categoria.ACTUALIDAD, usuario1);
+        ((ContenidoInteractivo)contenido1).agregarComentario(comentario1);
+        ((ContenidoInteractivo)contenido1).agregarComentario(comentario2);
+        ((ContenidoInteractivo)contenido1).agregarComentario(comentario3);
+        this.contenidos.add(contenido1);
+        this.contenidos.add(new ContenidoNoInteractivo("Reseña de la última película de Quentin Tarantino", "4  de Quentin Tarantino. Analizamos la trama, los personajes y el estilo único del aclamado director.", Categoria.ACTUALIDAD, usuario1));
+        this.contenidos.add(new ContenidoNoInteractivo("Los mejores destinos para mochileros en América del Sur", "5  en América del Sur. Desde las playas paradisíacas de Brasil hasta las impresionantes montañas de Perú, tenemos todo cubierto.", Categoria.VIDEOJUEGOS, usuario1));
+        this.usuarios.add(new Usuario("1", "1", "yahveh@gmail.com"));
     }
 
     //Metodos
@@ -60,9 +72,13 @@ public class GestorRedSocial {
         return null;
     }
 
-    public void agregarContenido(Contenido contenido){
-        this.contenidos.add(contenido);
-        System.out.println(this.contenidos);
+    public boolean agregarContenido(Contenido contenido){
+        boolean flag = false;
+        if(contenido != null) {
+            this.contenidos.add(contenido);
+            System.out.println(this.contenidos);
+        }
+        return flag;
     }
 
     public Contenido obtenerContenido(){
@@ -91,9 +107,9 @@ public class GestorRedSocial {
     }
 
     public Contenido retroceder (Contenido contenidoActual){
-        Contenido contenido = null;
+        Contenido contenido = contenidoActual;
         Iterator<Contenido> iterator = obtenerIteradorContenido();
-        Contenido contenidoAnterior = null;
+        Contenido contenidoAnterior = contenidoActual;
         while (iterator.hasNext()) {
             contenido = iterator.next();
             if (contenido.equals(contenidoActual)) {
@@ -102,8 +118,7 @@ public class GestorRedSocial {
             contenidoAnterior = contenido;
         }
 
-        return null;
-
+        return contenido;
     }
 
     // Método para ver el contenido actual
@@ -111,6 +126,55 @@ public class GestorRedSocial {
         // Crear una copia de la colección de contenidos
         Iterator<Contenido> iterator = this.contenidos.iterator();
         return iterator;
+    }
+
+    public boolean agregarPublicacionAUsuario(Usuario usuario, Contenido contenido){
+        boolean flag = false;
+        if(contenido != null) {
+            usuario.agregarPublicado(contenido);
+            flag = true;
+        }
+        return flag;
+    }
+
+    public String retornarCantidadLikes(Contenido contenido){
+        int cantidad = 0;
+        if(contenido instanceof ContenidoInteractivo){
+            cantidad = ((ContenidoInteractivo) contenido).getLikes();
+        }
+        return Integer.toString(cantidad);
+    }
+
+    private boolean buscarEnLikeadosDeUsuario(Usuario usuario, Contenido contenido){
+        return usuario.buscarEnLikeado(contenido);
+    }
+
+    public void likeDisLikeContenido(Usuario usuario, Contenido contenido){
+        if(contenido instanceof ContenidoInteractivo){
+            if(buscarEnLikeadosDeUsuario(usuario, contenido)){
+                ((ContenidoInteractivo) contenido).setLikes(((ContenidoInteractivo) contenido).getLikes()-1);
+                usuario.eliminarLikeado(contenido);
+            }else{
+                ((ContenidoInteractivo) contenido).setLikes(((ContenidoInteractivo) contenido).getLikes()+1);
+                usuario.agregarLikeado(contenido);
+            }
+        }
+    }
+
+    public Comentario crearComentario(Usuario usuario, Contenido contenido, String texto){
+        Comentario comentario = null;
+        if(usuario != null && contenido != null){
+            comentario = new Comentario(contenido.getIdContenido(), usuario, Estado.ACTIVO, texto);
+        }
+        return comentario;
+    }
+
+    public void agregarComentario(Usuario usuario, Contenido contenido, String texto){
+        if(contenido instanceof ContenidoInteractivo){
+        Comentario comentario = crearComentario(usuario, contenido, texto);
+        this.comentarios.add(comentario);
+            ((ContenidoInteractivo)contenido).agregarComentario(comentario);
+        }
     }
 
     public void mostrarArbol(){
