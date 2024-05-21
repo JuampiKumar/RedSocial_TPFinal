@@ -656,8 +656,7 @@ public class PanelGrafico extends JFrame {
         JComboBox<Categoria> preferenciasComboBox = new JComboBox<>(Categoria.values());
         preferenciasComboBox.setBounds(200, 310, 150, 30);
 
-        JButton agregarButton = new JButton("AGREGAR");
-        JButton eliminarButton = new JButton("ELIMINAR");
+        JButton agregarEliminarButton = new JButton("AGREGAR/ELIMINAR");
         JButton guardarButton = new JButton("GUARDAR");
         JButton cancelarButton = new JButton("CANCELAR");
 
@@ -671,29 +670,22 @@ public class PanelGrafico extends JFrame {
         preferenciasLabel.setBounds(50, 200, 150, 30);
         preferenciasArea.setBounds(200, 200, 150, 100);
         preferenciasComboBox.setBounds(200, 310, 150, 30);
-        agregarButton.setBounds(50, 350, 100, 30);
-        eliminarButton.setBounds(200, 350, 100, 30);
-        guardarButton.setBounds(50, 400, 100, 30);
-        cancelarButton.setBounds(200, 400, 100, 30);
+        agregarEliminarButton.setBounds(150, 350, 200, 40);
+        guardarButton.setBounds(130, 400, 100, 30);
+        cancelarButton.setBounds(270, 400, 100, 30);
 
-        // Acción del botón Agregar
-        agregarButton.addActionListener(new ActionListener() {
+
+        agregarEliminarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Categoria preferenciaSeleccionada = (Categoria) preferenciasComboBox.getSelectedItem();
                 if (!usuario.getPreferencias().contains(preferenciaSeleccionada)) {
-                    usuario.getPreferencias().add(preferenciaSeleccionada);
+                    gestor.agregarPreferencia(usuario,preferenciaSeleccionada);
                     preferenciasText[0].append(preferenciaSeleccionada).append("\n");
                     preferenciasArea.setText(preferenciasText[0].toString());
                 }
-            }
-        });
-
-        // Acción del botón Eliminar
-        eliminarButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Categoria preferenciaSeleccionada = (Categoria) preferenciasComboBox.getSelectedItem();
-                if (usuario.getPreferencias().contains(preferenciaSeleccionada)) {
-                    usuario.getPreferencias().remove(preferenciaSeleccionada);
+                else{
+                    Categoria preferenciaSeleccionada2 = (Categoria) preferenciasComboBox.getSelectedItem();
+                    gestor.eliminarPreferencia(usuario, preferenciaSeleccionada2);
                     preferenciasText[0] = new StringBuilder();
                     for (Categoria preferencia : usuario.getPreferencias()) {
                         preferenciasText[0].append(preferencia).append("\n");
@@ -741,8 +733,7 @@ public class PanelGrafico extends JFrame {
         panelModificarInfo.add(preferenciasLabel);
         panelModificarInfo.add(preferenciasArea);
         panelModificarInfo.add(preferenciasComboBox);
-        panelModificarInfo.add(agregarButton);
-        panelModificarInfo.add(eliminarButton);
+        panelModificarInfo.add(agregarEliminarButton);
         panelModificarInfo.add(guardarButton);
         panelModificarInfo.add(cancelarButton);
 
@@ -751,7 +742,3 @@ public class PanelGrafico extends JFrame {
         setVisible(true);
     }
 }
-
-
-
-

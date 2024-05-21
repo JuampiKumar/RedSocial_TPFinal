@@ -185,5 +185,15 @@ public class GestorRedSocial {
             System.out.println(contenido.toString());
         }
     }
+    public void agregarPreferencia(Usuario usuario,Categoria preferenciaSeleccionada) {
+        usuario.getPreferencias().add(preferenciaSeleccionada);
+    }
+    public void eliminarPreferencia(Usuario usuario,Categoria preferenciaSeleccionada) {
+
+        if (usuario.getPreferencias().contains(preferenciaSeleccionada)) {
+            usuario.getPreferencias().remove(preferenciaSeleccionada);
+
+        }
+    }
 
 }
