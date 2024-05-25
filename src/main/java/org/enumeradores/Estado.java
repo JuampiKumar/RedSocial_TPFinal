@@ -1,4 +1,4 @@
-package enumeradores;
+package org.enumeradores;
 
 public enum Estado {
     ACTIVO,

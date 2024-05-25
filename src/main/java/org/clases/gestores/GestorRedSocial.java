@@ -1,14 +1,16 @@
 package org.clases.gestores;
 
-import clases.Comentario;
+import org.clases.Comentario;
 
-import clases.clasesContenido.ContenidoNoInteractivo;
-import clases.clasesContenido.Contenido;
-import clases.clasesContenido.ContenidoInteractivo;
-import clases.clasesUsuarios.Usuario;
-import enumeradores.Categoria;
-import enumeradores.Estado;
+import org.clases.clasesUsuarios.Usuario;
+import org.enumeradores.Categoria;
+import org.enumeradores.Estado;
+import org.clases.clasesContenido.Contenido;
+import org.clases.clasesContenido.ContenidoInteractivo;
+import org.clases.clasesContenido.ContenidoNoInteractivo;
+import org.controladorArchivos.ControladorEXCEL;
 
+import java.io.IOException;
 import java.util.*;
 
 public class GestorRedSocial {
@@ -18,8 +20,10 @@ public class GestorRedSocial {
     private List<Usuario> usuarios;
     private List<Comentario> comentarios;
 
+    private ControladorEXCEL controladorEXCEL;
+
     //Constructor
-    public GestorRedSocial(){
+    public GestorRedSocial() {
         this.scanner = new Scanner(System.in);
         this.comentarios = new LinkedList<>();
         this.usuarios = new LinkedList<>();
@@ -195,5 +199,6 @@ public class GestorRedSocial {
 
         }
     }
+
 
 }

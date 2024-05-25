@@ -1,6 +1,6 @@
 package org.clases;
 
-import clases.clasesUsuarios.Usuario;
+import org.clases.clasesUsuarios.Usuario;
 
 public class RedSocial {
     //Atributos

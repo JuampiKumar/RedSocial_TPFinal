@@ -1,8 +1,8 @@
-package clases.clasesUsuarios;
+package org.clases.clasesUsuarios;
 
-import clases.clasesContenido.Contenido;
-import enumeradores.Estado;
-import enumeradores.Categoria;
+import org.clases.clasesContenido.Contenido;
+import org.enumeradores.Estado;
+import org.enumeradores.Categoria;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

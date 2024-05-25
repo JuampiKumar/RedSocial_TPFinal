@@ -1,13 +1,14 @@
-package clases.clasesContenido;
+package org.clases.clasesContenido;
 
-import clases.Comentario;
-import clases.clasesUsuarios.Usuario;
-import enumeradores.Categoria;
+import org.clases.Comentario;
+import org.clases.clasesUsuarios.Usuario;
+import org.enumeradores.Categoria;
+import org.clases.clasesContenido.Contenido;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class ContenidoInteractivo extends clases.clasesContenido.Contenido {
+public class ContenidoInteractivo extends Contenido {
     //Atributos
     private int likes;
     private List<Comentario> comentarios;

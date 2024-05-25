@@ -1,7 +1,7 @@
-package clases;
+package org.clases;
 
-import clases.clasesUsuarios.Usuario;
-import enumeradores.Estado;
+import org.clases.clasesUsuarios.Usuario;
+import org.enumeradores.Estado;
 
 public class Comentario {
     //Atributos

@@ -1,16 +1,17 @@
 package org.clases;
 
-import clases.clasesContenido.Contenido;
-import clases.clasesContenido.ContenidoInteractivo;
-import clases.clasesContenido.ContenidoNoInteractivo;
-import clases.clasesUsuarios.Usuario;
+import org.clases.clasesContenido.Contenido;
+import org.clases.clasesContenido.ContenidoInteractivo;
+import org.clases.clasesContenido.ContenidoNoInteractivo;
+import org.clases.clasesUsuarios.Usuario;
 import org.clases.gestores.GestorRedSocial;
-import enumeradores.Categoria;
-import enumeradores.TipoContenido;
+import org.enumeradores.Categoria;
+import org.enumeradores.TipoContenido;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 
 public class PanelGrafico extends JFrame {
@@ -19,7 +20,7 @@ public class PanelGrafico extends JFrame {
     private Contenido contenido;
     private Usuario usuario;
     private GestorRedSocial gestor;
-    public PanelGrafico() {
+    public PanelGrafico()  {
         // Configurar la ventana principal
         setTitle("RED SOCIAL");
         setSize(500, 500);
@@ -490,7 +491,7 @@ public class PanelGrafico extends JFrame {
 
         // Llenar el área de texto con los comentarios
         StringBuilder sb = new StringBuilder();
-        for (clases.Comentario comentario : ((ContenidoInteractivo)contenido).getComentarios()) {
+        for (Comentario comentario : ((ContenidoInteractivo)contenido).getComentarios()) {
             sb.append(comentario.getUsuario().getUserName()).append(": ").append(comentario.getComentario()).append("\n");
         }
         comentariosArea.setText(sb.toString());
