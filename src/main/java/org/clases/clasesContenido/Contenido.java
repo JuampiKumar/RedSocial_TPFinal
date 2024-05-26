@@ -1,49 +1,77 @@
 package org.clases.clasesContenido;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.google.gson.annotations.Expose;
 import org.clases.clasesUsuarios.Usuario;
 import org.enumeradores.Categoria;
 import org.enumeradores.Estado;
 import org.interfaces.IIdentificable;
 
+import java.io.Serializable;
 import java.util.Objects;
-
-public abstract class Contenido implements Comparable<Contenido>, IIdentificable {
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "tipo")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ContenidoInteractivo.class, name = "interactivo"),
+        @JsonSubTypes.Type(value = ContenidoNoInteractivo.class, name = "no_interactivo")
+})
+public abstract class Contenido implements Comparable<Contenido>, IIdentificable, Serializable {
     //Atributos
+    @JsonProperty("tipo")
+    private String tipo;
+    @JsonProperty
     private final int idContenido;
-    private Usuario usuario;
+    @JsonProperty
     private int idUsuario;
+    @JsonProperty
     private String titulo;
+    @JsonProperty
     private String contenido;
+    @JsonProperty
     private Categoria categoria;
+    @JsonProperty
     private Estado estado;
+    @JsonProperty
     private static int idIncremental = 0;
 
     //Constructor
-    public Contenido(String titulo, String contenido, Categoria categoria, Usuario ususario) {
+    public Contenido(String titulo, String contenido, Categoria categoria, int idUsusario, String tipo) {
         this.idContenido = idIncremental;
         this.titulo = titulo;
         this.contenido = contenido;
         this.categoria = categoria;
-        this.usuario = ususario;
         this.estado = Estado.ACTIVO;
-        this.idUsuario = usuario.getIdUsuario();
+        this.idUsuario = idUsusario;
         idIncremental++;
+        this.tipo = tipo;
     }
 
-    public Contenido(String titulo, String contenido, Categoria categoria, int idUsuario) {
-        this.idContenido = idIncremental;
+    @JsonCreator
+    public Contenido(
+            @JsonProperty("idContenido") int idContenido,
+            @JsonProperty("idUsuario") int idUsuario,
+            @JsonProperty("titulo") String titulo,
+            @JsonProperty("contenido") String contenido,
+            @JsonProperty("categoria") Categoria categoria,
+            @JsonProperty("estado") Estado estado,
+            @JsonProperty("idIncremental") int idIncremental,
+            @JsonProperty("tipo")String tipo
+        ){
+        this.idContenido = idContenido;
+        this.idUsuario = idUsuario;
         this.titulo = titulo;
         this.contenido = contenido;
         this.categoria = categoria;
-        this.idUsuario = idUsuario;
-        this.estado = Estado.ACTIVO;
-        idIncremental++;
+        this.estado = estado;
+        this.tipo = tipo;
     }
 
     //Getters y Setters
-    public Usuario getUsuario() {
-        return usuario;
-    }
 
     public int getIdContenido() {
         return idContenido;

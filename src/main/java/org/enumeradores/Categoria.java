@@ -1,6 +1,8 @@
 package org.enumeradores;
 
-public enum Categoria {
+import java.io.Serializable;
+
+public enum Categoria implements Serializable {
     PELICULAS,
     ACTUALIDAD,
     VIDEOJUEGOS,

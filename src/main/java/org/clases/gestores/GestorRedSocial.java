@@ -3,17 +3,21 @@ package org.clases.gestores;
 import org.clases.Comentario;
 
 import org.clases.clasesUsuarios.Usuario;
+import org.controladorArchivos.ImpresoraJSON;
 import org.enumeradores.Categoria;
 import org.enumeradores.Estado;
 import org.clases.clasesContenido.Contenido;
 import org.clases.clasesContenido.ContenidoInteractivo;
 import org.clases.clasesContenido.ContenidoNoInteractivo;
-import org.controladorArchivos.ControladorEXCEL;
 import org.interfaces.IIdentificable;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.controladorArchivos.Impresora.DEFAULT_PATH;
 
 public class GestorRedSocial {
     //Atributos
@@ -21,8 +25,7 @@ public class GestorRedSocial {
     private TreeSet<Contenido> contenidos;
     private List<Usuario> usuarios;
     private List<Comentario> comentarios;
-
-    private ControladorEXCEL controladorEXCEL;
+    private ImpresoraJSON impresoraJSON;
 
     //Constructor
     public GestorRedSocial() {
@@ -30,25 +33,31 @@ public class GestorRedSocial {
         this.comentarios = new LinkedList<>();
         this.usuarios = new LinkedList<>();
         this.contenidos = new TreeSet<>();
+        this.impresoraJSON = new ImpresoraJSON();
+    }
 
+    //Metodos
+    public void cargarDatosARedSocial(){
         Usuario usuario1 = new Usuario("diafir", "2002", "yahveh@gmail.com");
-        Comentario comentario1 = new Comentario(1, usuario1, Estado.ACTIVO, "jajajaj xd");
-        Comentario comentario2 = new Comentario(2, usuario1, Estado.ACTIVO, "tremendo pa");
-        Comentario comentario3 = new Comentario(3, usuario1, Estado.ACTIVO, "i cant belive it");
+        Comentario comentario1 = new Comentario(1, usuario1.getIdUsuario(), Estado.ACTIVO, "jajajaj xd");
+        Comentario comentario2 = new Comentario(2, usuario1.getIdUsuario(), Estado.ACTIVO, "tremendo pa");
+        Comentario comentario3 = new Comentario(3, usuario1.getIdUsuario(), Estado.ACTIVO, "i cant belive it");
+        this.comentarios.add(comentario1);
+        this.comentarios.add(comentario2);
+        this.comentarios.add(comentario3);
         this.usuarios.add(usuario1);
-        this.contenidos.add(new ContenidoInteractivo("Cómo cultivar tomates en casa", "1 . Descubre los mejores consejos y trucos para obtener una cosecha abundante.", Categoria.ACTUALIDAD, usuario1));
-        this.contenidos.add(new ContenidoNoInteractivo("Los beneficios del yoga para la salud mental", "2 mental. Descubre cómo esta práctica milenaria puede ayudarte a reducir el estrés, mejorar la concentración y encontrar la paz interior.", Categoria.ACTUALIDAD, usuario1));
-        Contenido contenido1 = new ContenidoInteractivo("Entrevista exclusiva con Elon Musk", "3 . Descubre sus ideas revolucionarias sobre el futuro de la tecnología, el espacio y la sostenibilidad.", Categoria.ACTUALIDAD, usuario1);
+        this.contenidos.add(new ContenidoInteractivo("Cómo cultivar tomates en casa", "1 . Descubre los mejores consejos y trucos para obtener una cosecha abundante.", Categoria.ACTUALIDAD, usuario1.getIdUsuario()));
+        this.contenidos.add(new ContenidoNoInteractivo("Los beneficios del yoga para la salud mental", "2 mental. Descubre cómo esta práctica milenaria puede ayudarte a reducir el estrés, mejorar la concentración y encontrar la paz interior.", Categoria.ACTUALIDAD, usuario1.getIdUsuario()));
+        Contenido contenido1 = new ContenidoInteractivo("Entrevista exclusiva con Elon Musk", "3 . Descubre sus ideas revolucionarias sobre el futuro de la tecnología, el espacio y la sostenibilidad.", Categoria.ACTUALIDAD, usuario1.getIdUsuario());
         ((ContenidoInteractivo)contenido1).agregarComentario(comentario1);
         ((ContenidoInteractivo)contenido1).agregarComentario(comentario2);
         ((ContenidoInteractivo)contenido1).agregarComentario(comentario3);
         this.contenidos.add(contenido1);
-        this.contenidos.add(new ContenidoNoInteractivo("Reseña de la última película de Quentin Tarantino", "4  de Quentin Tarantino. Analizamos la trama, los personajes y el estilo único del aclamado director.", Categoria.ACTUALIDAD, usuario1));
-        this.contenidos.add(new ContenidoNoInteractivo("Los mejores destinos para mochileros en América del Sur", "5  en América del Sur. Desde las playas paradisíacas de Brasil hasta las impresionantes montañas de Perú, tenemos todo cubierto.", Categoria.VIDEOJUEGOS, usuario1));
+        this.contenidos.add(new ContenidoNoInteractivo("Reseña de la última película de Quentin Tarantino", "4  de Quentin Tarantino. Analizamos la trama, los personajes y el estilo único del aclamado director.", Categoria.ACTUALIDAD, usuario1.getIdUsuario()));
+        this.contenidos.add(new ContenidoNoInteractivo("Los mejores destinos para mochileros en América del Sur", "5  en América del Sur. Desde las playas paradisíacas de Brasil hasta las impresionantes montañas de Perú, tenemos todo cubierto.", Categoria.VIDEOJUEGOS, usuario1.getIdUsuario()));
         this.usuarios.add(new Usuario("1", "1", "yahveh@gmail.com"));
     }
 
-    //Metodos
     public void registrarUsuarioNuevo(String userName, String passWord, String correo){
         if(validarUsuario(userName) == false  && validarMail(correo) == true){
             this.usuarios.add(new Usuario(userName, passWord, correo));
@@ -133,6 +142,15 @@ public class GestorRedSocial {
         return iterator;
     }
 
+    // Método para ver el contenido actual filtrando categorias y estado de contenido
+    public Iterator<Contenido> obtenerIteradorContenido(Usuario usuario) {
+        Set<Categoria> preferencias = new HashSet<>(usuario.getPreferencias());
+        return this.contenidos.stream()
+                .filter(c -> c.getEstado() == Estado.ACTIVO && (preferencias.isEmpty() || preferencias.contains(c.getCategoria())))
+                .toList()
+                .iterator();
+    }
+
     public boolean agregarPublicacionAUsuario(Usuario usuario, Contenido contenido){
         boolean flag = false;
         if(contenido != null) {
@@ -169,7 +187,7 @@ public class GestorRedSocial {
     public Comentario crearComentario(Usuario usuario, Contenido contenido, String texto){
         Comentario comentario = null;
         if(usuario != null && contenido != null){
-            comentario = new Comentario(contenido.getIdContenido(), usuario, Estado.ACTIVO, texto);
+            comentario = new Comentario(contenido.getIdContenido(), usuario.getIdUsuario(), Estado.ACTIVO, texto);
         }
         return comentario;
     }
@@ -220,4 +238,34 @@ public class GestorRedSocial {
         usuario.setUserName(nuevoUserName);
     }
 
+    public List<Comentario> devolverListaDeComentarioDeContenido(ContenidoInteractivo contenido){
+        List<Comentario> comentariosOrdenados = comentarios.stream()
+                .filter(comentario -> comentario.getIdContenido() == contenido.getIdContenido())
+                .sorted()
+                .toList();
+
+        return comentariosOrdenados;
+    }
+
+    public void guardarDatosEnJSON() {
+        try {
+            impresoraJSON.imprimirUsuario(this.usuarios, DEFAULT_PATH + "/usuarios.json");
+            impresoraJSON.imprimircContenido(new ArrayList<>(this.contenidos), DEFAULT_PATH + "/contenidos.json");
+            impresoraJSON.imprimirComentario(this.comentarios, DEFAULT_PATH + "/comentarios.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Ha ocurrido un error al guardar los datos en JSON.");
+        }
+    }
+
+    public void cargarDatosEnJSON() {
+        try {
+            this.usuarios = impresoraJSON.leerUsuario(DEFAULT_PATH + "/usuarios.json/usuarios.json");
+            this.contenidos = new TreeSet<>(impresoraJSON.leerContenido(DEFAULT_PATH + "/contenidos.json/contenidos.json"));
+            this.comentarios = impresoraJSON.leerComentario(DEFAULT_PATH + "/comentarios.json/comentarios.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+

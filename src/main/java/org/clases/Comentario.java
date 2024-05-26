@@ -1,34 +1,32 @@
 package org.clases;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.Expose;
 import org.clases.clasesUsuarios.Usuario;
 import org.enumeradores.Estado;
 import org.interfaces.IIdentificable;
 
-public class Comentario implements IIdentificable {
-    //Atributos
-    private final int idComentario;
-    private final int idContenido;
-    private final int idUsuario;
-    private Usuario usuario;
-    private Estado estado;
-    private String comentario;
+import java.io.Serializable;
 
+public class Comentario implements IIdentificable, Serializable {
+    //Atributos
+    @JsonProperty
+    private final int idComentario;
+    @JsonProperty
+    private final int idContenido;
+    @JsonProperty
+    private final int idUsuario;
+    @JsonProperty
+    private Estado estado;
+    @JsonProperty
+    private String comentario;
+    @JsonProperty
     private static int id = 0;
 
     //Constructor
-    public Comentario(int idContenido, Usuario usuario, Estado estado, String comentario) {
-        this.idContenido = idContenido;
-        this.usuario = usuario;
-        this.estado = estado;
-        this.comentario = comentario;
-        this.idUsuario = usuario.getIdUsuario();
-        this.idComentario = id;
-        id++;
-    }
-
     public Comentario(int idContenido, int idUsuario, Estado estado, String comentario) {
         this.idContenido = idContenido;
-        this.usuario = usuario;
         this.estado = estado;
         this.comentario = comentario;
         this.idUsuario = idUsuario;
@@ -36,13 +34,25 @@ public class Comentario implements IIdentificable {
         id++;
     }
 
+    @JsonCreator
+    public Comentario(
+            @JsonProperty("idComentario") int idComentario,
+            @JsonProperty("idContenido") int idContenido,
+            @JsonProperty("idUsuario") int idUsuario,
+            @JsonProperty("estado") Estado estado,
+            @JsonProperty("comentario") String comentario,
+            @JsonProperty("id") int id
+            ) {
+        this.idComentario = idComentario;
+        this.idContenido = idContenido;
+        this.idUsuario = idUsuario;
+        this.estado = estado;
+        this.comentario = comentario;
+    }
+
     //Getter and Setter
     public int getIdContenido() {
         return idContenido;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
     }
 
     public Estado getEstado() {

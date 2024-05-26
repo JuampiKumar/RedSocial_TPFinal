@@ -30,12 +30,12 @@ public class PanelGrafico extends JFrame {
     private final int FIELD_HEIGHT = 30;
 
     // Configurar la ventana principal
-    public PanelGrafico() {
+    public PanelGrafico(GestorRedSocial gestor) {
         setTitle("RED SOCIAL");
         setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        this.gestor = new GestorRedSocial();
+        this.gestor = gestor;
         this.contenido = null;
         this.usuario = null;
     }
@@ -86,6 +86,7 @@ public class PanelGrafico extends JFrame {
 
         salirButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                gestor.guardarDatosEnJSON();
                 dispose();
             }
         });
@@ -462,9 +463,9 @@ public class PanelGrafico extends JFrame {
                 Categoria categoria = (Categoria) categoriaComboBox.getSelectedItem();
                 Contenido publicacion = null;
                 if(tipo == TipoContenido.PUBLICACION){ //Se va a crear un contenido u otro dependiendo la opcion elegida en los radioButton
-                    publicacion = new ContenidoInteractivo(titulo, contenido, categoria, usuario);
+                    publicacion = new ContenidoInteractivo(titulo, contenido, categoria, usuario.getIdUsuario());
                 }else{
-                    publicacion = new ContenidoNoInteractivo(titulo, contenido, categoria, usuario);
+                    publicacion = new ContenidoNoInteractivo(titulo, contenido, categoria, usuario.getIdUsuario());
                 }
                 gestor.agregarContenido(publicacion);
                 gestor.agregarPublicacionAUsuario(usuario, publicacion); //Se llaman metodos del gestor
@@ -487,7 +488,7 @@ public class PanelGrafico extends JFrame {
         JPanel panelVerContenido = new JPanel();
         panelVerContenido.setLayout(new BoxLayout(panelVerContenido, BoxLayout.Y_AXIS));
         //Se trae un iterador de la coleccion de contenidos del gestor
-        Iterator<Contenido> iterator = gestor.obtenerIteradorContenido();
+        Iterator<Contenido> iterator = gestor.obtenerIteradorContenido(usuario);
         while(iterator.hasNext()){
             Contenido contenidoActual = iterator.next();
 
@@ -508,7 +509,7 @@ public class PanelGrafico extends JFrame {
             gbcCont.anchor = GridBagConstraints.CENTER;
 
             //Se crean los elementos del panelContenido
-            JLabel nombreLabel = new JLabel(contenidoActual.getUsuario().getUserName());
+            JLabel nombreLabel = new JLabel(gestor.buscarPorId(contenidoActual.getIdUsuario(), Usuario.class).getUserName());
             JLabel tituloLabel = new JLabel(contenidoActual.getTitulo());
 
             JLabel likeLabel = new JLabel("LIKES: " + gestor.retornarCantidadLikes(contenidoActual));
@@ -529,7 +530,7 @@ public class PanelGrafico extends JFrame {
                 gbcComentarios.gridx = 0;
                 gbcComentarios.gridy = 0;
                 panelComentarios.add(comentarioComentar, gbcComentarios);
-                for (Comentario comentario : ((ContenidoInteractivo)contenidoActual).getComentarios()) {
+                for (Comentario comentario : gestor.devolverListaDeComentarioDeContenido((ContenidoInteractivo)contenidoActual)) {
                     if(comentario.getEstado() == Estado.ACTIVO) {
                         //Se crea un panel para almacenar individualmente los comentarios
                         //Se crea dentro de un bucle para poder generar un panel individual por cada comentario de cada contenido
@@ -539,7 +540,7 @@ public class PanelGrafico extends JFrame {
                         gbcComentario.anchor = GridBagConstraints.WEST;
 
                         //Se crean los elementos del panel individual
-                        JLabel comentarioUsuarioLabel = new JLabel(comentario.getUsuario().getUserName() + ": ");
+                        JLabel comentarioUsuarioLabel = new JLabel(gestor.buscarPorId(comentario.getIdUsuario(), Usuario.class).getUserName() + ": ");
                         JTextArea comentarioArea = new JTextArea(comentario.getComentario());
 
                         comentarioArea.setLineWrap(true);  // Habilita el salto de línea automático

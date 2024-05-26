@@ -1,19 +1,23 @@
 package org.clases;
 
 import org.clases.clasesUsuarios.Usuario;
+import org.clases.gestores.GestorRedSocial;
 
 public class RedSocial {
     //Atributos
-    PanelGrafico panelGrafico;
-
+    private PanelGrafico panelGrafico;
+    private GestorRedSocial gestorRedSocial;
     //Constructor
     public RedSocial(){
-        this.panelGrafico = new PanelGrafico();
+        gestorRedSocial = new GestorRedSocial();
+        //gestorRedSocial.cargarDatosARedSocial();
+        gestorRedSocial.cargarDatosEnJSON();
+        //gestorRedSocial.guardarDatosEnJSON();
+        this.panelGrafico = new PanelGrafico(gestorRedSocial);
     }
 
     //Metodos
     public void inicio(){
-        Usuario usuario;
         panelGrafico.menuPrincipal();
     }
 

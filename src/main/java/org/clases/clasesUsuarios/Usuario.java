@@ -1,25 +1,36 @@
 package org.clases.clasesUsuarios;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.Expose;
 import org.clases.clasesContenido.Contenido;
 import org.enumeradores.Estado;
 import org.enumeradores.Categoria;
 import org.interfaces.IIdentificable;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Usuario implements IIdentificable {
+public class Usuario implements IIdentificable, Serializable {
     //Atributos
+    @JsonProperty
     private final int idUsuario;
+    @JsonProperty
     private String userName;
+    @JsonProperty
     private String password;
+    @JsonProperty
     private String mail;
+    @JsonProperty
     private Estado estado;
-    HashMap<Integer,Contenido> contenidosPublicados;
-    HashMap<Integer,Contenido> contenidosLikeados;
+    @JsonProperty
     private List<Categoria> preferencias;
-    private List<Contenido> publicados;
-    private List<Contenido> likeados;
-
+    @JsonProperty
+    private List<Integer> publicados;
+    @JsonProperty
+    private List<Integer> likeados;
+    @JsonProperty
     private static int id = 0;
 
     //Constructor
@@ -31,10 +42,30 @@ public class Usuario implements IIdentificable {
         this.preferencias = new ArrayList<>();
         this.publicados = new LinkedList<>();
         this.likeados = new LinkedList<>();
-        this.contenidosPublicados = new HashMap<>();
-        this.contenidosLikeados = new HashMap<>();
         this.estado = Estado.ACTIVO;
         id++;
+    }
+
+    @JsonCreator
+    public Usuario(
+            @JsonProperty("idUsuario") int idUsuario,
+            @JsonProperty("userName") String userName,
+            @JsonProperty("password") String password,
+            @JsonProperty("mail") String mail,
+            @JsonProperty("estado") Estado estado,
+            @JsonProperty("preferencias") List<Categoria> preferencias,
+            @JsonProperty("publicados") List<Integer> publicados,
+            @JsonProperty("likeados") List<Integer> likeados,
+            @JsonProperty("id") int id
+            ) {
+        this.idUsuario = idUsuario;
+        this.userName = userName;
+        this.password = password;
+        this.mail = mail;
+        this.estado = estado;
+        this.preferencias = preferencias;
+        this.publicados = publicados;
+        this.likeados = likeados;
     }
 
     //Getter y Setter
@@ -78,11 +109,11 @@ public class Usuario implements IIdentificable {
         return preferencias;
     }
 
-    public List<Contenido> getPublicados() {
+    public List<Integer> getPublicados() {
         return publicados;
     }
 
-    public List<Contenido> getLikeados() {
+    public List<Integer> getLikeados() {
         return likeados;
     }
 
@@ -94,7 +125,7 @@ public class Usuario implements IIdentificable {
     //Metodos
     public boolean buscarEnLikeado(Contenido contenido){
         boolean flag = false;
-        if(this.likeados.contains(contenido)){
+        if(this.likeados.contains(contenido.getIdContenido())){
             flag = true;
         }
         return flag;
@@ -102,25 +133,25 @@ public class Usuario implements IIdentificable {
 
     public void agregarLikeado(Contenido contenido){
         if(contenido != null){
-            this.likeados.add(contenido);
+            this.likeados.add(contenido.getIdContenido());
         }
     }
 
     public void eliminarLikeado(Contenido contenido){
         if(contenido != null){
-            this.likeados.remove(contenido);
+            this.likeados.remove(contenido.getIdContenido());
         }
     }
 
     public void agregarPublicado(Contenido contenido){
         if(contenido != null){
-        this.publicados.add(contenido);
+        this.publicados.add(contenido.getIdContenido());
         }
     }
 
     public void eliminarPublicado(Contenido contenido){
             if(contenido != null){
-        this.publicados.remove(contenido);
+        this.publicados.remove(contenido.getIdContenido());
     }
 }
 
