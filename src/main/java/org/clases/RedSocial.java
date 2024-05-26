@@ -6,7 +6,6 @@ public class RedSocial {
     //Atributos
     PanelGrafico panelGrafico;
 
-
     //Constructor
     public RedSocial(){
         this.panelGrafico = new PanelGrafico();

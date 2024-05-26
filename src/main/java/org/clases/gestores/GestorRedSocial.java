@@ -9,9 +9,11 @@ import org.clases.clasesContenido.Contenido;
 import org.clases.clasesContenido.ContenidoInteractivo;
 import org.clases.clasesContenido.ContenidoNoInteractivo;
 import org.controladorArchivos.ControladorEXCEL;
+import org.interfaces.IIdentificable;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class GestorRedSocial {
     //Atributos
@@ -30,8 +32,8 @@ public class GestorRedSocial {
         this.contenidos = new TreeSet<>();
 
         Usuario usuario1 = new Usuario("diafir", "2002", "yahveh@gmail.com");
-        Comentario comentario1 = new Comentario(3, usuario1, Estado.ACTIVO, "jajajaj xd");
-        Comentario comentario2 = new Comentario(3, usuario1, Estado.ACTIVO, "tremendo pa");
+        Comentario comentario1 = new Comentario(1, usuario1, Estado.ACTIVO, "jajajaj xd");
+        Comentario comentario2 = new Comentario(2, usuario1, Estado.ACTIVO, "tremendo pa");
         Comentario comentario3 = new Comentario(3, usuario1, Estado.ACTIVO, "i cant belive it");
         this.usuarios.add(usuario1);
         this.contenidos.add(new ContenidoInteractivo("Cómo cultivar tomates en casa", "1 . Descubre los mejores consejos y trucos para obtener una cosecha abundante.", Categoria.ACTUALIDAD, usuario1));
@@ -47,7 +49,6 @@ public class GestorRedSocial {
     }
 
     //Metodos
-
     public void registrarUsuarioNuevo(String userName, String passWord, String correo){
         if(validarUsuario(userName) == false  && validarMail(correo) == true){
             this.usuarios.add(new Usuario(userName, passWord, correo));
@@ -174,31 +175,49 @@ public class GestorRedSocial {
     }
 
     public void agregarComentario(Usuario usuario, Contenido contenido, String texto){
-        if(contenido instanceof ContenidoInteractivo){
+        if(contenido instanceof ContenidoInteractivo && !texto.trim().isEmpty()){
         Comentario comentario = crearComentario(usuario, contenido, texto);
         this.comentarios.add(comentario);
             ((ContenidoInteractivo)contenido).agregarComentario(comentario);
         }
     }
 
-    public void mostrarArbol(){
-        Iterator<Contenido> iterador = obtenerIteradorContenido();
-        Contenido contenido = null;
-        while(iterador.hasNext()) {
-            contenido = iterador.next();
-            System.out.println(contenido.toString());
-        }
-    }
     public void agregarPreferencia(Usuario usuario,Categoria preferenciaSeleccionada) {
         usuario.getPreferencias().add(preferenciaSeleccionada);
     }
-    public void eliminarPreferencia(Usuario usuario,Categoria preferenciaSeleccionada) {
 
+    public void eliminarPreferencia(Usuario usuario,Categoria preferenciaSeleccionada) {
         if (usuario.getPreferencias().contains(preferenciaSeleccionada)) {
             usuario.getPreferencias().remove(preferenciaSeleccionada);
-
         }
     }
 
+    public <T extends IIdentificable> T buscarPorId(int id, Class<T> tipo) {
+        Stream<? extends IIdentificable> stream = null;
+
+        if (tipo == Usuario.class) {
+            stream = this.usuarios.stream();
+        } else if (tipo == Comentario.class) {
+            stream = this.comentarios.stream();
+        } else if (tipo == Contenido.class) {
+            stream = this.contenidos.stream();
+        }
+
+        if (stream != null) {
+            Optional<? extends IIdentificable> result = stream.filter(item -> item.getId() == id).findFirst();
+            if (result.isPresent()) {
+                return tipo.cast(result.get());
+            }
+        }
+
+        return null;
+    }
+
+    public void actualizarDatosUsuario(String nuevoUserName, String nuevaPassword, String nuevoMail, int id){
+        Usuario usuario = buscarPorId(id, Usuario.class);
+        usuario.setMail(nuevoMail);
+        usuario.setPassword(nuevaPassword);
+        usuario.setUserName(nuevoUserName);
+    }
 
 }

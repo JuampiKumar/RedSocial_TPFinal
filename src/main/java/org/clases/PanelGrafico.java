@@ -6,48 +6,70 @@ import org.clases.clasesContenido.ContenidoNoInteractivo;
 import org.clases.clasesUsuarios.Usuario;
 import org.clases.gestores.GestorRedSocial;
 import org.enumeradores.Categoria;
+import org.enumeradores.Estado;
 import org.enumeradores.TipoContenido;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Iterator;
 
 
 public class PanelGrafico extends JFrame {
-    private JPanel menuActual;
-    private int op = 0;
     private Contenido contenido;
     private Usuario usuario;
     private GestorRedSocial gestor;
-    public PanelGrafico()  {
-        // Configurar la ventana principal
+
+    private final int SCREEN_WIDTH = 1000;
+    private final int SCREEN_HEIGHT = 800;
+    private final int BUTTON_WIDTH = 200;
+    private final int BUTTON_HEIGHT = 30;
+    private final int FIELD_WIDTH = 200;
+    private final int FIELD_HEIGHT = 30;
+
+    // Configurar la ventana principal
+    public PanelGrafico() {
         setTitle("RED SOCIAL");
-        setSize(500, 500);
+        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
+        setLocationRelativeTo(null);
         this.gestor = new GestorRedSocial();
         this.contenido = null;
         this.usuario = null;
     }
 
-    public void menuPrincipal() {
+    public void menuPrincipal() { //Menu principal
+        //Creamos y seteamos la configuracion del panel de este menu
         JPanel panelMenuPrincipal = new JPanel();
-        panelMenuPrincipal.setLayout(null); // Establecer el diseño del panel como null para usar coordenadas absolutas
-        // Crear botones para las opciones del menú principal
+        panelMenuPrincipal.setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        //Creamos los botones del menu principal
         JButton registrarseButton = new JButton("REGISTRARSE");
         JButton ingresarButton = new JButton("INGRESAR");
         JButton salirButton = new JButton("SALIR");
 
-        // Establecer posiciones y tamaños de los botones
-        registrarseButton.setBounds(150, 50, 200, 30);
-        ingresarButton.setBounds(150, 100, 200, 30);
-        salirButton.setBounds(150, 150, 200, 30);
+        //Dimensiones de los botones
+        Dimension buttonSize = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+        registrarseButton.setPreferredSize(buttonSize);
+        ingresarButton.setPreferredSize(buttonSize);
+        salirButton.setPreferredSize(buttonSize);
 
-        // Agregar los botones al panel
-        panelMenuPrincipal.add(registrarseButton);
-        panelMenuPrincipal.add(ingresarButton);
-        panelMenuPrincipal.add(salirButton);
+        //Agregamos al panel los elementos
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panelMenuPrincipal.add(registrarseButton, gbc);
+
+        gbc.gridy = 1;
+        panelMenuPrincipal.add(ingresarButton, gbc);
+
+        gbc.gridy = 2;
+        panelMenuPrincipal.add(salirButton, gbc);
 
         // Definir ActionListener para cada botón
         registrarseButton.addActionListener(new ActionListener() {
@@ -73,9 +95,14 @@ public class PanelGrafico extends JFrame {
         setVisible(true);
     }
 
-    public void menuRegistro() {
+    public void menuRegistro() { //Menu regustro de usuario
+        //Creamos y seteamos la configuracion del panel de este menu
         JPanel panelMenuRegistro = new JPanel();
-        panelMenuRegistro.setLayout(null); // Establecer el diseño del panel como null para usar coordenadas absolutas
+        panelMenuRegistro.setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
 
         // Crear elementos para el menú de registro
         JLabel usernameLabel = new JLabel("NOMBRE DE USUARIO:");
@@ -87,25 +114,63 @@ public class PanelGrafico extends JFrame {
         JButton registrarButton = new JButton("REGISTRAR");
         JButton salirButton = new JButton("SALIR");
 
-        // Establecer posiciones y tamaños de los elementos
-        usernameLabel.setBounds(50, 50, 150, 30);
-        usernameField.setBounds(250, 50, 150, 30);
-        passwordLabel.setBounds(50, 100, 150, 30);
-        passwordField.setBounds(250, 100, 150, 30);
-        correoLabel.setBounds(50, 150, 150, 30);
-        correoField.setBounds(250, 150, 150, 30);
-        registrarButton.setBounds(200, 250, 100, 30);
-        salirButton.setBounds(200, 300, 100, 30);
+        //Establecemos las dimensiones de los elementos
+        Dimension fieldSize = new Dimension(FIELD_WIDTH, FIELD_HEIGHT);
+        usernameField.setPreferredSize(fieldSize);
+        passwordField.setPreferredSize(fieldSize);
+        correoField.setPreferredSize(fieldSize);
 
-        // Agregar los elementos al panel
-        panelMenuRegistro.add(usernameLabel);
-        panelMenuRegistro.add(usernameField);
-        panelMenuRegistro.add(passwordLabel);
-        panelMenuRegistro.add(passwordField);
-        panelMenuRegistro.add(correoLabel);
-        panelMenuRegistro.add(correoField);
-        panelMenuRegistro.add(registrarButton);
-        panelMenuRegistro.add(salirButton);
+        Dimension buttonSize = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+        registrarButton.setPreferredSize(buttonSize);
+        salirButton.setPreferredSize(buttonSize);
+
+        //Agregamos al panel del menuRegistro los elementos
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelMenuRegistro.add(usernameLabel, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuRegistro.add(usernameField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelMenuRegistro.add(passwordLabel, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuRegistro.add(passwordField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelMenuRegistro.add(correoLabel, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuRegistro.add(correoField, gbc);
+
+        //Espacio entre elmeentos
+        gbc.insets = new Insets(150, 10, 10, 10);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuRegistro.add(registrarButton, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuRegistro.add(salirButton, gbc);
 
         // Definir ActionListener para el botón de registrar
         registrarButton.addActionListener(new ActionListener() {
@@ -130,11 +195,16 @@ public class PanelGrafico extends JFrame {
         setVisible(true);
     }
 
-    public void menuIngreso() {
+    public void menuIngreso() { //Menu de Ingreso de usuario
+        //Creamos y seteamos la configuracion del panel del menuIngresp
         JPanel panelMenuIngreso = new JPanel();
-        panelMenuIngreso.setLayout(null); // Establecer el diseño del panel como null para usar coordenadas absolutas
+        panelMenuIngreso.setLayout(new GridBagLayout());
 
-        // Crear elementos para el menú de registro
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Crear elementos para el menú de ingreso
         JLabel usernameLabel = new JLabel("NOMBRE DE USUARIO:");
         JTextField usernameField = new JTextField();
         JLabel passwordLabel = new JLabel("CONTRASEÑA:");
@@ -142,23 +212,53 @@ public class PanelGrafico extends JFrame {
         JButton ingresarButton = new JButton("INGRESAR");
         JButton salirButton = new JButton("SALIR");
 
-        // Establecer posiciones y tamaños de los elementos
-        usernameLabel.setBounds(50, 50, 150, 30);
-        usernameField.setBounds(250, 50, 150, 30);
-        passwordLabel.setBounds(50, 100, 150, 30);
-        passwordField.setBounds(250, 100, 150, 30);
-        ingresarButton.setBounds(200, 200, 100, 30);
-        salirButton.setBounds(200, 250, 100, 30);
+        //Definimos las dimensiones de lo elementos del panel
+        Dimension fieldSize = new Dimension(FIELD_WIDTH, FIELD_HEIGHT);
+        usernameField.setPreferredSize(fieldSize);
+        passwordField.setPreferredSize(fieldSize);
 
-        // Agregar los elementos al panel
-        panelMenuIngreso.add(usernameLabel);
-        panelMenuIngreso.add(usernameField);
-        panelMenuIngreso.add(passwordLabel);
-        panelMenuIngreso.add(passwordField);
-        panelMenuIngreso.add(ingresarButton);
-        panelMenuIngreso.add(salirButton);
+        Dimension buttonSize = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+        ingresarButton.setPreferredSize(buttonSize);
+        salirButton.setPreferredSize(buttonSize);
 
-        // Definir ActionListener para el botón de registrar
+        //Agregamos al panel los elementos
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelMenuIngreso.add(usernameLabel, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuIngreso.add(usernameField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelMenuIngreso.add(passwordLabel, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuIngreso.add(passwordField, gbc);
+
+        //Espacio entre elementos
+        gbc.insets = new Insets(150, 10, 10, 10);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuIngreso.add(ingresarButton, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuIngreso.add(salirButton, gbc);
+
+        // Definir ActionListener para el botón del menuIngreso
         ingresarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Obtener los valores de los campos de texto y almacenarlos en variables
@@ -168,7 +268,6 @@ public class PanelGrafico extends JFrame {
                 if(gestor.encontrarUsuario(username, password) != null){
                     usuario = gestor.encontrarUsuario(username, password);
                     menuPerfil();
-                    // menuPerfil(gestor.encontrarUsuario(username, password));
                 }else{
                     menuIngreso();
                 }
@@ -188,30 +287,41 @@ public class PanelGrafico extends JFrame {
         setVisible(true);
     }
 
-    public void menuPerfil(){
+    public void menuPerfil(){ //Menu perfil del usuario ingresado
+        //Se crea y setea la configuracion del panel del menuPerfil
         JPanel panelMenuPerfil = new JPanel();
-        panelMenuPerfil.setLayout(null); // Establecer el diseño del panel como null para usar coordenadas absolutas
+        panelMenuPerfil.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
 
         // Crear botones para las opciones del menú de perfil
         JButton publicarButton = new JButton("PUBLICAR");
         JButton verPublicacionesButton = new JButton("VER PUBLICACIONES");
-        JButton modificarInfoButton = new JButton("MODIFICAR INFORMACIÓN");
         JButton miInfoButton = new JButton("MI INFORMACIÓN");
         JButton salirButton = new JButton("SALIR");
 
-        // Establecer posiciones y tamaños de los botones
-        publicarButton.setBounds(150, 50, 200, 30);
-        verPublicacionesButton.setBounds(150, 100, 200, 30);
-        modificarInfoButton.setBounds(150, 150, 200, 30);
-        miInfoButton.setBounds(150, 200, 200, 30);
-        salirButton.setBounds(150, 300, 200, 30);
+        //Definimos las dimensiones de los botones del panel
+        Dimension buttonSize = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+        publicarButton.setPreferredSize(buttonSize);
+        verPublicacionesButton.setPreferredSize(buttonSize);
+        miInfoButton.setPreferredSize(buttonSize);
+        salirButton.setPreferredSize(buttonSize);
 
-        // Agregar los botones al panel
-        panelMenuPerfil.add(publicarButton);
-        panelMenuPerfil.add(verPublicacionesButton);
-        panelMenuPerfil.add(modificarInfoButton);
-        panelMenuPerfil.add(miInfoButton);
-        panelMenuPerfil.add(salirButton);
+        //Agregamos al panel los elementos
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuPerfil.add(publicarButton, gbc);
+
+        gbc.gridy = 1;
+        panelMenuPerfil.add(verPublicacionesButton, gbc);
+
+        gbc.gridy = 2;
+        panelMenuPerfil.add(miInfoButton, gbc);
+
+        gbc.gridy = 3;
+        panelMenuPerfil.add(salirButton, gbc);
 
         // Definir ActionListener para cada botón
         publicarButton.addActionListener(new ActionListener() {
@@ -225,13 +335,6 @@ public class PanelGrafico extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 menuVerContenido();
                 System.out.println("Viendo publicaciones...");
-            }
-        });
-
-        modificarInfoButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                menuModifInfo();
-                System.out.println("Modificando información...");
             }
         });
 
@@ -253,57 +356,102 @@ public class PanelGrafico extends JFrame {
         setVisible(true);
     }
 
-    public void menuPublicar() {
+    public void menuPublicar() { //Menu publicar
+        //Creamos y seteamos la configuracion del panel del menuPublicar
         JPanel panelMenuPublicar = new JPanel();
-        panelMenuPublicar.setLayout(null);
+        panelMenuPublicar.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
 
+        //Creamos los elementos del panel
         JLabel tipoLabel = new JLabel("INTERACCIONES:");
-        tipoLabel.setBounds(50, 50, 150, 30);
-        panelMenuPublicar.add(tipoLabel);
+        JLabel tituloLabel = new JLabel("TÍTULO:");
+        JLabel contenidoLabel = new JLabel("CONTENIDO:");
+        JLabel categoriaLabel = new JLabel("CATEGORIA:");
 
         JRadioButton comunicadoRadioButton = new JRadioButton("NO");
         JRadioButton publicacionRadioButton = new JRadioButton("SI");
-        ButtonGroup tipoGroup = new ButtonGroup();
-        comunicadoRadioButton.setBounds(200, 50, 150, 30);
-        publicacionRadioButton.setBounds(350, 50, 150, 30);
+        ButtonGroup tipoGroup = new ButtonGroup(); //Creamos un grupo para trabajar en conjunto los radioButton
         tipoGroup.add(comunicadoRadioButton);
         tipoGroup.add(publicacionRadioButton);
-        panelMenuPublicar.add(comunicadoRadioButton);
-        panelMenuPublicar.add(publicacionRadioButton);
-
-        JLabel tituloLabel = new JLabel("TÍTULO:");
-        tituloLabel.setBounds(50, 100, 150, 30);
-        panelMenuPublicar.add(tituloLabel);
 
         JTextField tituloField = new JTextField();
-        tituloField.setBounds(200, 100, 250, 30);
-        panelMenuPublicar.add(tituloField);
-
-        JLabel contenidoLabel = new JLabel("CONTENIDO:");
-        contenidoLabel.setBounds(50, 150, 150, 30);
-        panelMenuPublicar.add(contenidoLabel);
-
         JTextArea contenidoArea = new JTextArea();
         JScrollPane contenidoScrollPane = new JScrollPane(contenidoArea);
-        contenidoScrollPane.setBounds(200, 150, 250, 100);
-        panelMenuPublicar.add(contenidoScrollPane);
-
-        JLabel categoriaLabel = new JLabel("CATEGORIA:");
-        categoriaLabel.setBounds(50, 270, 150, 30);
-        panelMenuPublicar.add(categoriaLabel);
 
         Categoria[] categorias = {Categoria.ACTUALIDAD, Categoria.DEPORTE, Categoria.PELICULAS, Categoria.TECNOLOGIA, Categoria.VIDEOJUEGOS, Categoria.OTROS};
         JComboBox<Categoria> categoriaComboBox = new JComboBox<>(categorias);
-        categoriaComboBox.setBounds(200, 270, 150, 30);
-        panelMenuPublicar.add(categoriaComboBox);
 
         JButton publicarButton = new JButton("PUBLICAR");
-        publicarButton.setBounds(150, 350, 150, 30);
-        panelMenuPublicar.add(publicarButton);
-
         JButton salirButton = new JButton("SALIR");
-        salirButton.setBounds(150, 400, 150, 30);
-        panelMenuPublicar.add(salirButton);
+
+        //Definimos las dimensiones de los elementos
+        Dimension fieldSize = new Dimension(FIELD_WIDTH, FIELD_HEIGHT);
+        tituloField.setPreferredSize(fieldSize);
+        Dimension buttonSize = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+        publicarButton.setPreferredSize(buttonSize);
+        salirButton.setPreferredSize(buttonSize);
+        contenidoScrollPane.setPreferredSize(new Dimension(FIELD_WIDTH, 150));
+
+        //Agregamos al panel los elementos
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelMenuPublicar.add(tipoLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panelMenuPublicar.add(comunicadoRadioButton, gbc);
+        gbc.gridx = 2;
+        panelMenuPublicar.add(publicacionRadioButton, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panelMenuPublicar.add(tituloLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuPublicar.add(tituloField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panelMenuPublicar.add(contenidoLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuPublicar.add(contenidoScrollPane, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelMenuPublicar.add(categoriaLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuPublicar.add(categoriaComboBox, gbc);
+
+        //Espacio entre elemntos
+        gbc.insets = new Insets(150, 10, 10, 10);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuPublicar.add(publicarButton, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMenuPublicar.add(salirButton, gbc);
+
 
         // Definir ActionListener para el botón de publicar
         publicarButton.addActionListener(new ActionListener() {
@@ -313,13 +461,13 @@ public class PanelGrafico extends JFrame {
                 String contenido = contenidoArea.getText();
                 Categoria categoria = (Categoria) categoriaComboBox.getSelectedItem();
                 Contenido publicacion = null;
-                if(tipo == TipoContenido.PUBLICACION){
+                if(tipo == TipoContenido.PUBLICACION){ //Se va a crear un contenido u otro dependiendo la opcion elegida en los radioButton
                     publicacion = new ContenidoInteractivo(titulo, contenido, categoria, usuario);
                 }else{
                     publicacion = new ContenidoNoInteractivo(titulo, contenido, categoria, usuario);
                 }
                 gestor.agregarContenido(publicacion);
-                gestor.agregarPublicacionAUsuario(usuario, publicacion);
+                gestor.agregarPublicacionAUsuario(usuario, publicacion); //Se llaman metodos del gestor
                 menuPerfil();
             }
         });
@@ -334,6 +482,204 @@ public class PanelGrafico extends JFrame {
         setVisible(true);
     }
 
+    public void menuVerContenido() { //Menu para ver contenido
+        //Se crea y setea la configuracion del panel principal del menuVerContenido
+        JPanel panelVerContenido = new JPanel();
+        panelVerContenido.setLayout(new BoxLayout(panelVerContenido, BoxLayout.Y_AXIS));
+        //Se trae un iterador de la coleccion de contenidos del gestor
+        Iterator<Contenido> iterator = gestor.obtenerIteradorContenido();
+        while(iterator.hasNext()){
+            Contenido contenidoActual = iterator.next();
+
+            //Panel de comentarios que va a tener la opcion de crear comentario y un panel interno con cada comentario
+            JPanel panelComentarios = new JPanel();
+            panelComentarios.setLayout(new GridBagLayout());
+            GridBagConstraints gbcComentarios = new GridBagConstraints();
+            gbcComentarios.insets = new Insets(5, 5, 5, 5);
+            gbcComentarios.anchor = GridBagConstraints.WEST;
+            panelComentarios.setVisible(false);
+            JButton comentarioComentar = new JButton("COMENTAR");
+
+            //Panel donde se vera el contenido, que a su vez tendra el panel de comentarios (panelComentarios)
+            JPanel panelContenido = new JPanel();
+            panelContenido.setLayout(new GridBagLayout());
+            GridBagConstraints gbcCont = new GridBagConstraints();
+            gbcCont.insets = new Insets(10, 10, 10, 10);
+            gbcCont.anchor = GridBagConstraints.CENTER;
+
+            //Se crean los elementos del panelContenido
+            JLabel nombreLabel = new JLabel(contenidoActual.getUsuario().getUserName());
+            JLabel tituloLabel = new JLabel(contenidoActual.getTitulo());
+
+            JLabel likeLabel = new JLabel("LIKES: " + gestor.retornarCantidadLikes(contenidoActual));
+
+            JTextArea contenidoArea = new JTextArea();
+            contenidoArea.setLineWrap(true);  // Habilita el salto de línea automático
+            contenidoArea.setWrapStyleWord(true);  // Hace que el salto de línea ocurra en los límites de palabras
+            contenidoArea.setEditable(false);
+
+            contenidoArea.setText(contenidoActual.getContenido());
+
+            JButton comentariosButton = new JButton("COMENTARIOS");
+            JButton likeButton = new JButton(":)");
+
+            //Se crea un Runnable para poder actualizar los comentarios cuando se escriba uno nuevo
+            Runnable actualizarComentarios = () -> {
+                panelComentarios.removeAll();
+                gbcComentarios.gridx = 0;
+                gbcComentarios.gridy = 0;
+                panelComentarios.add(comentarioComentar, gbcComentarios);
+                for (Comentario comentario : ((ContenidoInteractivo)contenidoActual).getComentarios()) {
+                    if(comentario.getEstado() == Estado.ACTIVO) {
+                        //Se crea un panel para almacenar individualmente los comentarios
+                        //Se crea dentro de un bucle para poder generar un panel individual por cada comentario de cada contenido
+                        JPanel panelComentarioIndividual = new JPanel(new GridBagLayout());
+                        GridBagConstraints gbcComentario = new GridBagConstraints();
+                        gbcComentario.insets = new Insets(5, 5, 5, 5);
+                        gbcComentario.anchor = GridBagConstraints.WEST;
+
+                        //Se crean los elementos del panel individual
+                        JLabel comentarioUsuarioLabel = new JLabel(comentario.getUsuario().getUserName() + ": ");
+                        JTextArea comentarioArea = new JTextArea(comentario.getComentario());
+
+                        comentarioArea.setLineWrap(true);  // Habilita el salto de línea automático
+                        comentarioArea.setWrapStyleWord(true);  // Hace que el salto de línea ocurra en los límites de palabras
+                        comentarioArea.setEditable(false);
+
+                        comentarioArea.setColumns(40); // Esto establece el ancho preferido
+                        comentarioArea.setRows(1); // Esto asegura que no tiene un alto fijo, el contenido lo ajustará
+
+                        //Se agrega al panel indiivdual los elmentos
+                        gbcComentario.gridx = 0;
+                        gbcComentario.gridy = 0;
+                        panelComentarioIndividual.add(comentarioUsuarioLabel, gbcComentario);
+
+                        gbcComentario.gridx = 1;
+                        gbcComentario.fill = GridBagConstraints.HORIZONTAL;  // Para que el JTextArea utilice el espacio horizontal disponible
+                        gbcComentario.weightx = 1.0;  // Distribuye el espacio horizontalmente
+                        panelComentarioIndividual.add(comentarioArea, gbcComentario);
+
+                        gbcComentarios.gridy++;
+                        panelComentarios.add(panelComentarioIndividual, gbcComentarios);
+                    }
+                }
+                panelComentarios.revalidate();
+                panelComentarios.repaint();
+            };
+
+            // Acción del botón like
+            likeButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    gestor.likeDisLikeContenido(usuario, contenidoActual);
+                    System.out.println(contenidoActual);
+                    likeLabel.setText("LIKES: " + gestor.retornarCantidadLikes(contenidoActual));
+                }
+            });
+
+            // Acción del botón comments
+            comentariosButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    actualizarComentarios.run();
+                    panelComentarios.setVisible(!panelComentarios.isVisible());
+                }
+            });
+
+            //Se dimensionan los elementos del panel de contenido
+            Dimension buttonSize = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+            comentariosButton.setPreferredSize(buttonSize);
+            likeButton.setPreferredSize(buttonSize);
+            contenidoArea.setPreferredSize(new Dimension(600, 200));
+
+            //Se agregan al panel de contenido los elementos
+            gbcCont.gridx = 0;
+            gbcCont.gridy = 0;
+            gbcCont.gridwidth = 2;
+            gbcCont.anchor = GridBagConstraints.CENTER;
+            panelContenido.add(tituloLabel, gbcCont);
+
+            gbcCont.gridx = 0;
+            gbcCont.gridy = 1;
+            panelContenido.add(nombreLabel, gbcCont);
+
+            gbcCont.gridx = 0;
+            gbcCont.gridy = 2;
+            panelContenido.add(contenidoArea, gbcCont);
+
+            gbcCont.anchor = GridBagConstraints.WEST;
+            gbcCont.gridx = 0;
+            gbcCont.gridy = 3;
+            panelContenido.add(likeLabel, gbcCont);
+
+            gbcCont.gridx = 1;
+            gbcCont.gridy = 4;
+            gbcCont.anchor = GridBagConstraints.EAST;
+            panelContenido.add(comentariosButton, gbcCont);
+
+            gbcCont.anchor = GridBagConstraints.WEST;
+            gbcCont.gridx = 0;
+            panelContenido.add(likeButton, gbcCont);
+
+            //Si el contenido no es interactivo, se esconden los botones de comentario y likes
+            if(!(contenidoActual instanceof ContenidoInteractivo)){
+                comentariosButton.setVisible(false);
+                likeButton.setVisible(false);
+                likeLabel.setVisible(false);
+            }
+
+            //Action listener del boton de crear comentario
+            comentarioComentar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String textoComentario = JOptionPane.showInputDialog("Ingrese comentario: ");
+                    gestor.agregarComentario(usuario, contenidoActual, textoComentario);
+                    actualizarComentarios.run();
+                    System.out.println("crea comentario");
+                }
+            });
+
+            //Se agregan al primer panel del menu los demas paneles, el panel de contenido y el panel de comentarios
+            panelComentarios.setVisible(false);
+            panelVerContenido.add(panelContenido);
+            panelVerContenido.add(panelComentarios);
+            panelVerContenido.add(Box.createRigidArea(new Dimension(0, 50))); //Separacion de elemtnos
+            panelVerContenido.add(new JSeparator(SwingConstants.HORIZONTAL)); //Separador visual
+        }
+
+        //Se crea el boton de salir para agregarlos en otro panel, para dejarlo fijo en pantalla
+        JButton salirButton = new JButton("SALIR");
+
+        // Acción del botón Salir
+        salirButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                contenido = null;
+                menuPerfil();
+            }
+        });
+
+        // Añadir el panel principal al JScrollPane para permitir el desplazamiento vertical
+        JScrollPane scrollPane = new JScrollPane(panelVerContenido);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        //agregamos el scrollPane con el panel principal a un contenedor para juntarlo con el botos de salir
+        JPanel container = new JPanel(new BorderLayout());
+        container.add(scrollPane, BorderLayout.CENTER);
+
+        // Agregar el botón de salir en la parte superior izquierda del contenedor
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(salirButton, BorderLayout.WEST);
+        container.add(topPanel, BorderLayout.NORTH);
+
+        //Seteamos el scrollpane para que se quede arriba ?
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                scrollPane.getVerticalScrollBar().setValue(0);
+            }
+        });
+
+        setContentPane(container);
+        setVisible(true);
+    }
+
+    /*
     public void menuVerContenido() {
         JPanel panelVerContenido = new JPanel();
         panelVerContenido.setLayout(null);
@@ -355,9 +701,9 @@ public class PanelGrafico extends JFrame {
         contenidoArea.setWrapStyleWord(true);  // Hace que el salto de línea ocurra en los límites de palabras
 
         // Hacer las áreas de texto de solo lectura
-            nombreArea.setEditable(false);
-            tituloArea.setEditable(false);
-            contenidoArea.setEditable(false);
+        nombreArea.setEditable(false);
+        tituloArea.setEditable(false);
+        contenidoArea.setEditable(false);
 
         nombreArea.setText(contenido.getUsuario().getUserName());
         tituloArea.setText(contenido.getTitulo());
@@ -469,7 +815,9 @@ public class PanelGrafico extends JFrame {
         setVisible(true);
     }
 
-    public void menuComments(){
+     */
+
+    /*public void menuComments(){
         JPanel panelComments = new JPanel();
         panelComments.setLayout(null); // Establecer el diseño del panel como null para usar coordenadas absolutas
 
@@ -564,10 +912,17 @@ public class PanelGrafico extends JFrame {
         setVisible(true);
     }
 
-    public void menuVerMiInfo() {
-        JPanel panelVerMiInfo = new JPanel();
-        panelVerMiInfo.setLayout(null);
+     */
 
+    public void menuVerMiInfo() { //Menu para ver informacion como usuario
+        //Creamos y seteamos la configuracion del panel
+        JPanel panelVerMiInfo = new JPanel();
+        panelVerMiInfo.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        //Creamos los elementos del panel
         JLabel userNameLabel = new JLabel("NOMBRE DE USUARIO:");
         JLabel passwordLabel = new JLabel("CONTRASEÑA:");
         JLabel mailLabel = new JLabel("CORREO ELECTRÓNICO:");
@@ -595,17 +950,66 @@ public class PanelGrafico extends JFrame {
         preferenciasArea.setText(preferenciasText.toString());
 
         JButton salirButton = new JButton("SALIR");
+        JButton modificarInfoButton = new JButton("MODIFICAR INFORMACIÓN");
 
-        // Posiciones y tamaños de los elementos
-        userNameLabel.setBounds(50, 50, 150, 30);
-        userNameArea.setBounds(200, 50, 150, 30);
-        passwordLabel.setBounds(50, 100, 150, 30);
-        passwordArea.setBounds(200, 100, 150, 30);
-        mailLabel.setBounds(50, 150, 150, 30);
-        mailArea.setBounds(200, 150, 150, 30);
-        preferenciasLabel.setBounds(50, 200, 150, 30);
-        preferenciasArea.setBounds(200, 200, 150, 100);
-        salirButton.setBounds(150, 350, 100, 30);
+        //Definimos las dimensiones de los elementos
+        Dimension fieldSize = new Dimension(FIELD_WIDTH, FIELD_HEIGHT);
+        userNameArea.setPreferredSize(fieldSize);
+        passwordArea.setPreferredSize(fieldSize);
+        mailArea.setPreferredSize(fieldSize);
+
+        Dimension buttonSize = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+        salirButton.setPreferredSize(buttonSize);
+        modificarInfoButton.setPreferredSize(buttonSize);
+        preferenciasArea.setPreferredSize(new Dimension(BUTTON_WIDTH,120));
+
+        // Posiciones de los elementos en el panel
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelVerMiInfo.add(userNameLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelVerMiInfo.add(userNameArea, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelVerMiInfo.add(passwordLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelVerMiInfo.add(passwordArea, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelVerMiInfo.add(mailLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelVerMiInfo.add(mailArea, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panelVerMiInfo.add(preferenciasLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelVerMiInfo.add(preferenciasArea, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelVerMiInfo.add(salirButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        panelVerMiInfo.add(modificarInfoButton, gbc);
 
         // Acción del botón Salir
         salirButton.addActionListener(new ActionListener() {
@@ -614,26 +1018,26 @@ public class PanelGrafico extends JFrame {
             }
         });
 
-        // Agregar elementos al panel
-        panelVerMiInfo.add(userNameLabel);
-        panelVerMiInfo.add(userNameArea);
-        panelVerMiInfo.add(passwordLabel);
-        panelVerMiInfo.add(passwordArea);
-        panelVerMiInfo.add(mailLabel);
-        panelVerMiInfo.add(mailArea);
-        panelVerMiInfo.add(preferenciasLabel);
-        panelVerMiInfo.add(preferenciasArea);
-        panelVerMiInfo.add(salirButton);
+        modificarInfoButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                menuModifInfo();
+            }
+        });
 
         // Mostrar el panel
         setContentPane(panelVerMiInfo);
         setVisible(true);
     }
 
-    public void menuModifInfo() {
+    public void menuModifInfo() { //Menu modificar informacion como usuario
+        //Creamos y seteamos la configuracion del panel
         JPanel panelModificarInfo = new JPanel();
-        panelModificarInfo.setLayout(null);
+        panelModificarInfo.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
 
+        //Creamos los elementos del panel
         JLabel userNameLabel = new JLabel("NOMBRE DE USUARIO:");
         JLabel passwordLabel = new JLabel("CONTRASEÑA:");
         JLabel mailLabel = new JLabel("CORREO ELECTRÓNICO:");
@@ -659,23 +1063,73 @@ public class PanelGrafico extends JFrame {
 
         JButton agregarEliminarButton = new JButton("AGREGAR/ELIMINAR");
         JButton guardarButton = new JButton("GUARDAR");
-        JButton cancelarButton = new JButton("CANCELAR");
+        JButton salirButton = new JButton("SALIR");
 
-        // Posiciones y tamaños de los elementos
-        userNameLabel.setBounds(50, 50, 150, 30);
-        userNameField.setBounds(200, 50, 150, 30);
-        passwordLabel.setBounds(50, 100, 150, 30);
-        passwordField.setBounds(200, 100, 150, 30);
-        mailLabel.setBounds(50, 150, 150, 30);
-        mailField.setBounds(200, 150, 150, 30);
-        preferenciasLabel.setBounds(50, 200, 150, 30);
-        preferenciasArea.setBounds(200, 200, 150, 100);
-        preferenciasComboBox.setBounds(200, 310, 150, 30);
-        agregarEliminarButton.setBounds(150, 350, 200, 40);
-        guardarButton.setBounds(130, 400, 100, 30);
-        cancelarButton.setBounds(270, 400, 100, 30);
+        //Definimos las dimensiones de los elementos
+        Dimension fieldSize = new Dimension(FIELD_WIDTH, FIELD_HEIGHT);
+        userNameField.setPreferredSize(fieldSize);
+        passwordField.setPreferredSize(fieldSize);
+        mailField.setPreferredSize(fieldSize);
 
+        Dimension buttonSize = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+        agregarEliminarButton.setPreferredSize(buttonSize);
+        guardarButton.setPreferredSize(buttonSize);
+        salirButton.setPreferredSize(buttonSize);
+        preferenciasArea.setPreferredSize(new Dimension(BUTTON_WIDTH,120));
 
+        // Posiciones de los elementos en el panel
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelModificarInfo.add(userNameLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelModificarInfo.add(userNameField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelModificarInfo.add(passwordLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelModificarInfo.add(passwordField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelModificarInfo.add(mailLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelModificarInfo.add(mailField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panelModificarInfo.add(preferenciasLabel, gbc);
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelModificarInfo.add(agregarEliminarButton, gbc);
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        panelModificarInfo.add(preferenciasComboBox, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelModificarInfo.add(preferenciasArea, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelModificarInfo.add(salirButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        panelModificarInfo.add(guardarButton, gbc);
+
+        // Acción del botón Agregar
         agregarEliminarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Categoria preferenciaSeleccionada = (Categoria) preferenciasComboBox.getSelectedItem();
@@ -703,40 +1157,20 @@ public class PanelGrafico extends JFrame {
                 String nuevoUserName = userNameField.getText();
                 String nuevaPassword = passwordField.getText();
                 String nuevoMail = mailField.getText();
-
                 // Actualizar los datos del usuario
-                usuario.setUserName(nuevoUserName);
-                usuario.setPassword(nuevaPassword);
-                usuario.setMail(nuevoMail);
-
-                // Mostrar mensaje de éxito o realizar alguna otra acción después de guardar los cambios
-
+                gestor.actualizarDatosUsuario(nuevoUserName, nuevaPassword, nuevoMail, usuario.getIdUsuario());
                 // Volver al menú de perfil
-                menuPerfil();
+                menuVerMiInfo();
             }
         });
 
         // Acción del botón Cancelar
-        cancelarButton.addActionListener(new ActionListener() {
+        salirButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Volver al menú de perfil sin guardar cambios
-                menuPerfil();
+                menuVerMiInfo();
             }
         });
-
-        // Agregar elementos al panel
-        panelModificarInfo.add(userNameLabel);
-        panelModificarInfo.add(userNameField);
-        panelModificarInfo.add(passwordLabel);
-        panelModificarInfo.add(passwordField);
-        panelModificarInfo.add(mailLabel);
-        panelModificarInfo.add(mailField);
-        panelModificarInfo.add(preferenciasLabel);
-        panelModificarInfo.add(preferenciasArea);
-        panelModificarInfo.add(preferenciasComboBox);
-        panelModificarInfo.add(agregarEliminarButton);
-        panelModificarInfo.add(guardarButton);
-        panelModificarInfo.add(cancelarButton);
 
         // Mostrar el panel
         setContentPane(panelModificarInfo);

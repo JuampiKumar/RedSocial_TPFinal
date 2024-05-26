@@ -3,19 +3,19 @@ package org.clases.clasesUsuarios;
 import org.clases.clasesContenido.Contenido;
 import org.enumeradores.Estado;
 import org.enumeradores.Categoria;
+import org.interfaces.IIdentificable;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-public class Usuario {
+public class Usuario implements IIdentificable {
     //Atributos
-    private int idUsuario;
+    private final int idUsuario;
     private String userName;
     private String password;
     private String mail;
     private Estado estado;
+    HashMap<Integer,Contenido> contenidosPublicados;
+    HashMap<Integer,Contenido> contenidosLikeados;
     private List<Categoria> preferencias;
     private List<Contenido> publicados;
     private List<Contenido> likeados;
@@ -31,6 +31,8 @@ public class Usuario {
         this.preferencias = new ArrayList<>();
         this.publicados = new LinkedList<>();
         this.likeados = new LinkedList<>();
+        this.contenidosPublicados = new HashMap<>();
+        this.contenidosLikeados = new HashMap<>();
         this.estado = Estado.ACTIVO;
         id++;
     }
@@ -84,8 +86,9 @@ public class Usuario {
         return likeados;
     }
 
-    public void agregarPublicado(Contenido contenido){
-        this.publicados.add(contenido);
+    @Override
+    public int getId() {
+        return getIdUsuario();
     }
 
     //Metodos
@@ -108,6 +111,18 @@ public class Usuario {
             this.likeados.remove(contenido);
         }
     }
+
+    public void agregarPublicado(Contenido contenido){
+        if(contenido != null){
+        this.publicados.add(contenido);
+        }
+    }
+
+    public void eliminarPublicado(Contenido contenido){
+            if(contenido != null){
+        this.publicados.remove(contenido);
+    }
+}
 
 
     //Override

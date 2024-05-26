@@ -11,6 +11,7 @@ import java.util.List;
 public class ContenidoInteractivo extends Contenido {
     //Atributos
     private int likes;
+    private List<Integer> idComentarios;
     private List<Comentario> comentarios;
 
     //Constructor
@@ -18,6 +19,7 @@ public class ContenidoInteractivo extends Contenido {
         super(titulo, contenido, categoria, usuario);
         this.likes = 0;
         this.comentarios = new LinkedList<>();
+        this.idComentarios = new LinkedList<>();
     }
 
     //Getters y Setters
@@ -39,5 +41,13 @@ public class ContenidoInteractivo extends Contenido {
 
     public void eliminarComentario(Comentario comentario){
         this.comentarios.remove(comentario);
+    }
+
+    public void agregarComentario(Integer idComentario){
+        this.idComentarios.add(idComentario);
+    }
+
+    public void eliminarComentario(Integer idComentario){
+        this.idComentarios.remove(idComentario);
     }
 }

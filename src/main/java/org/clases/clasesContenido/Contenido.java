@@ -3,13 +3,15 @@ package org.clases.clasesContenido;
 import org.clases.clasesUsuarios.Usuario;
 import org.enumeradores.Categoria;
 import org.enumeradores.Estado;
+import org.interfaces.IIdentificable;
 
 import java.util.Objects;
 
-public abstract class Contenido implements Comparable<Contenido>{
+public abstract class Contenido implements Comparable<Contenido>, IIdentificable {
     //Atributos
-    private int idContenido;
+    private final int idContenido;
     private Usuario usuario;
+    private int idUsuario;
     private String titulo;
     private String contenido;
     private Categoria categoria;
@@ -23,6 +25,17 @@ public abstract class Contenido implements Comparable<Contenido>{
         this.contenido = contenido;
         this.categoria = categoria;
         this.usuario = ususario;
+        this.estado = Estado.ACTIVO;
+        this.idUsuario = usuario.getIdUsuario();
+        idIncremental++;
+    }
+
+    public Contenido(String titulo, String contenido, Categoria categoria, int idUsuario) {
+        this.idContenido = idIncremental;
+        this.titulo = titulo;
+        this.contenido = contenido;
+        this.categoria = categoria;
+        this.idUsuario = idUsuario;
         this.estado = Estado.ACTIVO;
         idIncremental++;
     }
@@ -66,6 +79,15 @@ public abstract class Contenido implements Comparable<Contenido>{
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    @Override
+    public int getId() {
+        return getIdContenido();
     }
 
     //Overide
