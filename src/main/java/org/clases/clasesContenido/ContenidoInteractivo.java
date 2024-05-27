@@ -15,12 +15,8 @@ import java.util.List;
 
 public class ContenidoInteractivo extends Contenido {
     //Atributos
-    @JsonProperty
     private int likes;
-    @JsonProperty
     private List<Integer> comentarios;
-    @JsonIgnore
-    private int id;
 
     //Constructor
     public ContenidoInteractivo(String titulo, String contenido, Categoria categoria, int idUsuario) {
@@ -41,7 +37,7 @@ public class ContenidoInteractivo extends Contenido {
             @JsonProperty("likes") int likes,
             @JsonProperty("comentarios") List<Integer> comentarios
     ) {
-        super(idContenido, idUsuario, titulo, contenido, categoria, estado, idIncremental, "interactivo");
+        super(idContenido, idUsuario, titulo, contenido, categoria, estado, "interactivo");
         this.likes = likes;
         this.comentarios = comentarios;
     }
@@ -59,25 +55,12 @@ public class ContenidoInteractivo extends Contenido {
         return comentarios;
     }
 
-    public void setComentarios(List<Integer> comentarios) {
-        this.comentarios = comentarios;
-    }
-
     public void agregarComentario(Comentario comentario){
         this.comentarios.add(comentario.getIdComentario());
     }
 
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void eliminarComentario(Comentario comentario){
-        this.comentarios.remove(comentario.getIdComentario());
+        this.comentarios.remove((Integer)comentario.getIdComentario());
     }
 
 }

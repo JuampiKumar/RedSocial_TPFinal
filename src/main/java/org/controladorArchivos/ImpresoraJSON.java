@@ -1,6 +1,7 @@
 package org.controladorArchivos;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -28,15 +29,16 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ImpresoraJSON extends Impresora {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = getDefaultObjectMapper();
 
+    public static final String DEFAULT_PATH = "C:/Users/yahve/OneDrive/Desktop/RedSocial_TPFinal";
+    public static final String JSON_EXTENSION = ".json";
     private static final Logger logger = Logger.getLogger(ImpresoraJSON.class.getName());
-    private static final String DEFAULT_PATH = "C:/Users/yahve/OneDrive/Desktop/RedSocial_TPFinal";
-    private static final String JSON_EXTENSION = ".json";
 
-    @Override
-    public String imprimirUsuario(List<Usuario> usuarios) throws IOException {
-        return imprimir(usuarios, "usuarios");
+    private static ObjectMapper getDefaultObjectMapper(){
+        ObjectMapper defaultObjectMapper = new ObjectMapper();
+        defaultObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return defaultObjectMapper;
     }
 
     @Override
@@ -50,11 +52,6 @@ public class ImpresoraJSON extends Impresora {
     }
 
     @Override
-    public String imprimircContenido(List<Contenido> contenidos) throws IOException {
-        return imprimir(contenidos, "contenidos");
-    }
-
-    @Override
     public String imprimircContenido(List<Contenido> contenidos, String path) throws IOException {
         return imprimir(contenidos, path, "contenidos");
     }
@@ -65,11 +62,6 @@ public class ImpresoraJSON extends Impresora {
     }
 
     @Override
-    public String imprimirComentario(List<Comentario> comentarios) throws IOException {
-        return imprimir(comentarios, "comentarios");
-    }
-
-    @Override
     public String imprimirComentario(List<Comentario> comentarios, String path) throws IOException {
         return imprimir(comentarios, path, "comentarios");
     }
@@ -77,11 +69,6 @@ public class ImpresoraJSON extends Impresora {
     @Override
     public List<Comentario> leerComentario(String path) throws IOException {
         return leer(path, new TypeReference<List<Comentario>>() {});
-    }
-
-    private <T> String imprimir(List<T> lista, String tipo) throws IOException {
-        Path filePath = Paths.get(DEFAULT_PATH, tipo + JSON_EXTENSION);
-        return imprimir(lista, filePath);
     }
 
     private <T> String imprimir(List<T> lista, String path, String tipo) throws IOException {

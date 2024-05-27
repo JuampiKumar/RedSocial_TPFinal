@@ -1,6 +1,7 @@
 package org.clases.clasesUsuarios;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
@@ -14,28 +15,19 @@ import java.util.*;
 
 public class Usuario implements IIdentificable, Serializable {
     //Atributos
-    @JsonProperty
     private final int idUsuario;
-    @JsonProperty
     private String userName;
-    @JsonProperty
     private String password;
-    @JsonProperty
     private String mail;
-    @JsonProperty
     private Estado estado;
-    @JsonProperty
     private List<Categoria> preferencias;
-    @JsonProperty
     private List<Integer> publicados;
-    @JsonProperty
     private List<Integer> likeados;
-    @JsonProperty
-    private static int id = 0;
+    private static int idIncremental = 0;
 
     //Constructor
     public Usuario(String userName, String password, String mail) {
-        this.idUsuario = id;
+        this.idUsuario = idIncremental;
         this.userName = userName;
         this.password = password;
         this.mail = mail;
@@ -43,7 +35,7 @@ public class Usuario implements IIdentificable, Serializable {
         this.publicados = new LinkedList<>();
         this.likeados = new LinkedList<>();
         this.estado = Estado.ACTIVO;
-        id++;
+        idIncremental++;
     }
 
     @JsonCreator
@@ -55,8 +47,7 @@ public class Usuario implements IIdentificable, Serializable {
             @JsonProperty("estado") Estado estado,
             @JsonProperty("preferencias") List<Categoria> preferencias,
             @JsonProperty("publicados") List<Integer> publicados,
-            @JsonProperty("likeados") List<Integer> likeados,
-            @JsonProperty("id") int id
+            @JsonProperty("likeados") List<Integer> likeados
             ) {
         this.idUsuario = idUsuario;
         this.userName = userName;
@@ -66,6 +57,7 @@ public class Usuario implements IIdentificable, Serializable {
         this.preferencias = preferencias;
         this.publicados = publicados;
         this.likeados = likeados;
+        idIncremental++;
     }
 
     //Getter y Setter
@@ -117,6 +109,7 @@ public class Usuario implements IIdentificable, Serializable {
         return likeados;
     }
 
+    @JsonIgnore
     @Override
     public int getId() {
         return getIdUsuario();
@@ -132,14 +125,14 @@ public class Usuario implements IIdentificable, Serializable {
     }
 
     public void agregarLikeado(Contenido contenido){
-        if(contenido != null){
+        if(contenido != null && !this.likeados.contains(contenido.getIdContenido())){
             this.likeados.add(contenido.getIdContenido());
         }
     }
 
     public void eliminarLikeado(Contenido contenido){
-        if(contenido != null){
-            this.likeados.remove(contenido.getIdContenido());
+        if(contenido != null && this.likeados.contains(contenido.getIdContenido())){
+            this.likeados.remove((Integer)contenido.getIdContenido());
         }
     }
 
@@ -151,7 +144,7 @@ public class Usuario implements IIdentificable, Serializable {
 
     public void eliminarPublicado(Contenido contenido){
             if(contenido != null){
-        this.publicados.remove(contenido.getIdContenido());
+        this.publicados.remove((Integer)contenido.getIdContenido());
     }
 }
 

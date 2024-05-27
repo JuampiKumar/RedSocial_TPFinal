@@ -1,6 +1,7 @@
 package org.enumeradores;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public enum Categoria implements Serializable {
     PELICULAS,
@@ -9,4 +10,10 @@ public enum Categoria implements Serializable {
     TECNOLOGIA,
     DEPORTE,
     OTROS;
+
+    public static Categoria getRandomCategoria() {
+        Random random = new Random();
+        Categoria[] categorias = values();
+        return categorias[random.nextInt(categorias.length)];
+    }
 }

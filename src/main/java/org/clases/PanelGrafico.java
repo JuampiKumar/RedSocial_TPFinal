@@ -526,10 +526,14 @@ public class PanelGrafico extends JFrame {
 
             //Se crea un Runnable para poder actualizar los comentarios cuando se escriba uno nuevo
             Runnable actualizarComentarios = () -> {
+                System.out.println("1");
                 panelComentarios.removeAll();
+                System.out.println("2");
                 gbcComentarios.gridx = 0;
                 gbcComentarios.gridy = 0;
+                System.out.println("3");
                 panelComentarios.add(comentarioComentar, gbcComentarios);
+                System.out.println("4");
                 for (Comentario comentario : gestor.devolverListaDeComentarioDeContenido((ContenidoInteractivo)contenidoActual)) {
                     if(comentario.getEstado() == Estado.ACTIVO) {
                         //Se crea un panel para almacenar individualmente los comentarios
@@ -634,6 +638,7 @@ public class PanelGrafico extends JFrame {
                     gestor.agregarComentario(usuario, contenidoActual, textoComentario);
                     actualizarComentarios.run();
                     System.out.println("crea comentario");
+                    System.out.println(usuario);
                 }
             });
 

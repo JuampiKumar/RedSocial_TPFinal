@@ -1,9 +1,6 @@
 package org.clases.clasesContenido;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.*;
 import com.google.gson.annotations.Expose;
 import org.clases.clasesUsuarios.Usuario;
 import org.enumeradores.Categoria;
@@ -24,19 +21,12 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
     //Atributos
     @JsonProperty("tipo")
     private String tipo;
-    @JsonProperty
     private final int idContenido;
-    @JsonProperty
     private int idUsuario;
-    @JsonProperty
     private String titulo;
-    @JsonProperty
     private String contenido;
-    @JsonProperty
     private Categoria categoria;
-    @JsonProperty
     private Estado estado;
-    @JsonProperty
     private static int idIncremental = 0;
 
     //Constructor
@@ -59,7 +49,6 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
             @JsonProperty("contenido") String contenido,
             @JsonProperty("categoria") Categoria categoria,
             @JsonProperty("estado") Estado estado,
-            @JsonProperty("idIncremental") int idIncremental,
             @JsonProperty("tipo")String tipo
         ){
         this.idContenido = idContenido;
@@ -69,6 +58,7 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
         this.categoria = categoria;
         this.estado = estado;
         this.tipo = tipo;
+        idIncremental++;
     }
 
     //Getters y Setters
@@ -113,6 +103,11 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
         return idUsuario;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    @JsonIgnore
     @Override
     public int getId() {
         return getIdContenido();

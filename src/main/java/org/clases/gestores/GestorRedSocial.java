@@ -1,5 +1,6 @@
 package org.clases.gestores;
 
+import com.github.javafaker.Faker;
 import org.clases.Comentario;
 
 import org.clases.clasesUsuarios.Usuario;
@@ -38,24 +39,37 @@ public class GestorRedSocial {
 
     //Metodos
     public void cargarDatosARedSocial(){
-        Usuario usuario1 = new Usuario("diafir", "2002", "yahveh@gmail.com");
-        Comentario comentario1 = new Comentario(1, usuario1.getIdUsuario(), Estado.ACTIVO, "jajajaj xd");
-        Comentario comentario2 = new Comentario(2, usuario1.getIdUsuario(), Estado.ACTIVO, "tremendo pa");
-        Comentario comentario3 = new Comentario(3, usuario1.getIdUsuario(), Estado.ACTIVO, "i cant belive it");
-        this.comentarios.add(comentario1);
-        this.comentarios.add(comentario2);
-        this.comentarios.add(comentario3);
-        this.usuarios.add(usuario1);
-        this.contenidos.add(new ContenidoInteractivo("Cómo cultivar tomates en casa", "1 . Descubre los mejores consejos y trucos para obtener una cosecha abundante.", Categoria.ACTUALIDAD, usuario1.getIdUsuario()));
-        this.contenidos.add(new ContenidoNoInteractivo("Los beneficios del yoga para la salud mental", "2 mental. Descubre cómo esta práctica milenaria puede ayudarte a reducir el estrés, mejorar la concentración y encontrar la paz interior.", Categoria.ACTUALIDAD, usuario1.getIdUsuario()));
-        Contenido contenido1 = new ContenidoInteractivo("Entrevista exclusiva con Elon Musk", "3 . Descubre sus ideas revolucionarias sobre el futuro de la tecnología, el espacio y la sostenibilidad.", Categoria.ACTUALIDAD, usuario1.getIdUsuario());
-        ((ContenidoInteractivo)contenido1).agregarComentario(comentario1);
-        ((ContenidoInteractivo)contenido1).agregarComentario(comentario2);
-        ((ContenidoInteractivo)contenido1).agregarComentario(comentario3);
-        this.contenidos.add(contenido1);
-        this.contenidos.add(new ContenidoNoInteractivo("Reseña de la última película de Quentin Tarantino", "4  de Quentin Tarantino. Analizamos la trama, los personajes y el estilo único del aclamado director.", Categoria.ACTUALIDAD, usuario1.getIdUsuario()));
-        this.contenidos.add(new ContenidoNoInteractivo("Los mejores destinos para mochileros en América del Sur", "5  en América del Sur. Desde las playas paradisíacas de Brasil hasta las impresionantes montañas de Perú, tenemos todo cubierto.", Categoria.VIDEOJUEGOS, usuario1.getIdUsuario()));
-        this.usuarios.add(new Usuario("1", "1", "yahveh@gmail.com"));
+        Random random = new Random();
+        int ran = 0;
+        int ran2 = 0;
+        Contenido contenidoAux;
+        for(int i = 0; i < 10; i++){
+            Usuario usuario = new Usuario(Faker.instance().funnyName().toString(), Faker.instance().funnyName().toString() , Faker.instance().internet().emailAddress());
+            this.usuarios.add(usuario);
+        }
+        for(int i = 0; i < 25; i++){
+            ran = random.nextInt(10);
+            contenidoAux = new ContenidoInteractivo(Faker.instance().book().title(), Faker.instance().lorem().characters(), Categoria.getRandomCategoria(), ran);
+            agregarContenido(contenidoAux);
+            agregarPublicacionAUsuario(buscarPorId(ran, Usuario.class), contenidoAux);
+
+            ran = random.nextInt(10);
+            contenidoAux = new ContenidoNoInteractivo(Faker.instance().book().title(), Faker.instance().lorem().characters(), Categoria.getRandomCategoria(), ran);
+            agregarContenido(contenidoAux);
+            agregarPublicacionAUsuario(buscarPorId(ran, Usuario.class), contenidoAux);
+        }
+
+        for(int i = 0; i < 50; i++){
+            ran = random.nextInt(49);
+            ran2 = random.nextInt(9);
+            agregarComentario(buscarPorId(ran2, Usuario.class), buscarPorId(ran, Contenido.class), Faker.instance().lorem().characters() + Faker.instance().funnyName().toString());
+        }
+
+        for(int i = 0; i < 80; i++){
+            ran = random.nextInt(48);
+            ran2 = random.nextInt(8);
+            likeDisLikeContenido(buscarPorId(ran2, Usuario.class), buscarPorId(ran, Contenido.class));
+        }
     }
 
     public void registrarUsuarioNuevo(String userName, String passWord, String correo){
@@ -241,7 +255,6 @@ public class GestorRedSocial {
     public List<Comentario> devolverListaDeComentarioDeContenido(ContenidoInteractivo contenido){
         List<Comentario> comentariosOrdenados = comentarios.stream()
                 .filter(comentario -> comentario.getIdContenido() == contenido.getIdContenido())
-                .sorted()
                 .toList();
 
         return comentariosOrdenados;

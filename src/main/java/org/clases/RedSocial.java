@@ -10,8 +10,8 @@ public class RedSocial {
     //Constructor
     public RedSocial(){
         gestorRedSocial = new GestorRedSocial();
-        //gestorRedSocial.cargarDatosARedSocial();
         gestorRedSocial.cargarDatosEnJSON();
+        //gestorRedSocial.cargarDatosARedSocial();
         //gestorRedSocial.guardarDatosEnJSON();
         this.panelGrafico = new PanelGrafico(gestorRedSocial);
     }

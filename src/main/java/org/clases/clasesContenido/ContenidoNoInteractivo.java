@@ -10,9 +10,6 @@ import org.enumeradores.Estado;
 
 public class ContenidoNoInteractivo extends Contenido {
     //Constructor
-    @JsonIgnore
-    private int id;
-
     public ContenidoNoInteractivo(String titulo, String contenido, Categoria categoria, int idUsuario) {
         super(titulo, contenido, categoria, idUsuario, "no_interactivo");
     }
@@ -24,9 +21,8 @@ public class ContenidoNoInteractivo extends Contenido {
             @JsonProperty("titulo") String titulo,
             @JsonProperty("contenido") String contenido,
             @JsonProperty("categoria") Categoria categoria,
-            @JsonProperty("estado") Estado estado,
-            @JsonProperty("idIncremental") int idIncremental
+            @JsonProperty("estado") Estado estado
     ) {
-        super(idContenido, idUsuario, titulo, contenido, categoria, estado, idIncremental, "no_interactivo");
+        super(idContenido, idUsuario, titulo, contenido, categoria, estado, "no_interactivo");
     }
 }
