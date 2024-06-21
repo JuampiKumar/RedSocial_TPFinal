@@ -2,32 +2,31 @@ package org.clases.clasesUsuarios;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.Expose;
 import org.clases.clasesContenido.Contenido;
 import org.enumeradores.Estado;
 import org.enumeradores.Categoria;
-import org.interfaces.IIdentificable;
+import org.interfaces.IEstado;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class Usuario implements IIdentificable, Serializable {
+public class Usuario implements Serializable, IEstado{
     //Atributos
-    private final int idUsuario;
+    private final String idUsuario;
     private String userName;
     private String password;
     private String mail;
     private Estado estado;
     private List<Categoria> preferencias;
-    private List<Integer> publicados;
-    private List<Integer> likeados;
+    private List<String> publicados;
+    private List<String> likeados;
     private static int idIncremental = 0;
+    private boolean admin;
 
     //Constructor
     public Usuario(String userName, String password, String mail) {
-        this.idUsuario = idIncremental;
+        this.idUsuario = "U" + idIncremental;
         this.userName = userName;
         this.password = password;
         this.mail = mail;
@@ -35,19 +34,23 @@ public class Usuario implements IIdentificable, Serializable {
         this.publicados = new LinkedList<>();
         this.likeados = new LinkedList<>();
         this.estado = Estado.ACTIVO;
+        if(idUsuario.equals("U0")){
+            this.admin = true;
+        }else this.admin = false;
         idIncremental++;
     }
 
     @JsonCreator
     public Usuario(
-            @JsonProperty("idUsuario") int idUsuario,
+            @JsonProperty("idUsuario") String idUsuario,
             @JsonProperty("userName") String userName,
             @JsonProperty("password") String password,
             @JsonProperty("mail") String mail,
             @JsonProperty("estado") Estado estado,
             @JsonProperty("preferencias") List<Categoria> preferencias,
-            @JsonProperty("publicados") List<Integer> publicados,
-            @JsonProperty("likeados") List<Integer> likeados
+            @JsonProperty("publicados") List<String> publicados,
+            @JsonProperty("likeados") List<String> likeados,
+            @JsonProperty("admin") Boolean admin
             ) {
         this.idUsuario = idUsuario;
         this.userName = userName;
@@ -57,6 +60,7 @@ public class Usuario implements IIdentificable, Serializable {
         this.preferencias = preferencias;
         this.publicados = publicados;
         this.likeados = likeados;
+        this.admin = admin;
         idIncremental++;
     }
 
@@ -69,7 +73,7 @@ public class Usuario implements IIdentificable, Serializable {
         this.estado = estado;
     }
 
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
@@ -83,6 +87,10 @@ public class Usuario implements IIdentificable, Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public Boolean getAdmin(){
+        return admin;
     }
 
     public void setPassword(String password) {
@@ -101,19 +109,14 @@ public class Usuario implements IIdentificable, Serializable {
         return preferencias;
     }
 
-    public List<Integer> getPublicados() {
+    public List<String> getPublicados() {
         return publicados;
     }
 
-    public List<Integer> getLikeados() {
+    public List<String> getLikeados() {
         return likeados;
     }
 
-    @JsonIgnore
-    @Override
-    public int getId() {
-        return getIdUsuario();
-    }
 
     //Metodos
     public boolean buscarEnLikeado(Contenido contenido){
@@ -132,7 +135,7 @@ public class Usuario implements IIdentificable, Serializable {
 
     public void eliminarLikeado(Contenido contenido){
         if(contenido != null && this.likeados.contains(contenido.getIdContenido())){
-            this.likeados.remove((Integer)contenido.getIdContenido());
+            this.likeados.remove(contenido.getIdContenido());
         }
     }
 
@@ -144,17 +147,16 @@ public class Usuario implements IIdentificable, Serializable {
 
     public void eliminarPublicado(Contenido contenido){
             if(contenido != null){
-        this.publicados.remove((Integer)contenido.getIdContenido());
+        this.publicados.remove(contenido.getIdContenido());
     }
 }
 
 
-    //Override
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Usuario usuario)) return false;
-        return idUsuario == usuario.idUsuario && Objects.equals(userName, usuario.userName);
+        return idUsuario.equals(usuario.idUsuario) && Objects.equals(userName, usuario.userName);
     }
 
     @Override
@@ -167,4 +169,43 @@ public class Usuario implements IIdentificable, Serializable {
         return "ID: " + idUsuario +
                 ", userName: " + userName;
     }
+
+    @Override
+    public boolean activar() {
+        if (this.getEstado() == Estado.INACTIVO){
+            this.setEstado(Estado.ACTIVO);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean desactivar(){
+        if (this.getEstado() == Estado.ACTIVO){
+            this.setEstado(Estado.INACTIVO);
+            return true;
+        }
+        return false;
+    }
+
+
+    // ESTO SOLIA SER UNA INTERFAZ
+
+    /*
+    @Override
+    public boolean esAdministrador() {
+        if(this.idUsuario == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean noEsAdministrador() {
+        if(this.idUsuario != 0) {
+            return true;
+        }
+        else return false;
+    }
+    */
 }

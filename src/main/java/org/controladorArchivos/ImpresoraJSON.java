@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class ImpresoraJSON extends Impresora {
     private static ObjectMapper objectMapper = getDefaultObjectMapper();
 
-    public static final String DEFAULT_PATH = "C:/Users/yahve/OneDrive/Desktop/RedSocial_TPFinal";
     public static final String JSON_EXTENSION = ".json";
     private static final Logger logger = Logger.getLogger(ImpresoraJSON.class.getName());
 

@@ -3,36 +3,34 @@ package org.clases;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.Expose;
-import org.clases.clasesUsuarios.Usuario;
 import org.enumeradores.Estado;
-import org.interfaces.IIdentificable;
+import org.interfaces.IEstado;
 
 import java.io.Serializable;
 
-public class Comentario implements IIdentificable, Serializable {
+public class Comentario implements Serializable, IEstado {
     //Atributos
-    private final int idComentario;
-    private final int idContenido;
-    private final int idUsuario;
+    private final String idComentario;
+    private final String idContenido;
+    private final String idUsuario;
     private Estado estado;
     private String comentario;
     private static int idIncremental = 0;
 
     //Constructor
-    public Comentario(int idContenido, int idUsuario, Estado estado, String comentario) {
+    public Comentario(String idContenido, String idUsuario, Estado estado, String comentario) {
         this.idContenido = idContenido;
         this.estado = estado;
         this.comentario = comentario;
         this.idUsuario = idUsuario;
-        this.idComentario = idIncremental;
+        this.idComentario = "M" + idIncremental;
         idIncremental++;
     }
     @JsonCreator
     public Comentario(
-            @JsonProperty("idContenido") int idContenido,
-            @JsonProperty("idUsuario") int idUsuario,
-            @JsonProperty("idComentario") int idComentario,
+            @JsonProperty("idContenido") String idContenido,
+            @JsonProperty("idUsuario") String idUsuario,
+            @JsonProperty("idComentario") String idComentario,
             @JsonProperty("estado") Estado estado,
             @JsonProperty("comentario") String comentario
     ) {
@@ -53,7 +51,7 @@ public class Comentario implements IIdentificable, Serializable {
     }
 
     //Getter and Setter
-    public int getIdContenido() {
+    public String getIdContenido() {
         return idContenido;
     }
 
@@ -65,17 +63,38 @@ public class Comentario implements IIdentificable, Serializable {
         return comentario;
     }
 
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public int getIdComentario() {
+    public String getIdComentario() {
         return idComentario;
     }
 
-    @JsonIgnore
+
+    public boolean activar() {
+        if (this.getEstado() == Estado.INACTIVO){
+            this.setEstado(Estado.ACTIVO);
+            return true;
+        }
+        return false;
+    }
+
     @Override
-    public int getId() {
-        return getIdComentario();
+    public boolean desactivar(){
+        if (this.getEstado() == Estado.ACTIVO){
+            this.setEstado(Estado.INACTIVO);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Comentario" +
+                ". ID: " + getIdComentario() +
+                ". ID usuario: " + getIdUsuario() +
+                ". ID Contenido: " + getIdContenido() +
+                ". " + getComentario();
     }
 }

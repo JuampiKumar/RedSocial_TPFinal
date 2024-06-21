@@ -7,22 +7,50 @@ import org.clases.clasesUsuarios.Usuario;
 import org.enumeradores.Categoria;
 import org.clases.clasesContenido.Contenido;
 import org.enumeradores.Estado;
+import org.interfaces.IEstado;
 
-public class ContenidoNoInteractivo extends Contenido {
+public class ContenidoNoInteractivo extends Contenido implements IEstado {
     //Constructor
-    public ContenidoNoInteractivo(String titulo, String contenido, Categoria categoria, int idUsuario) {
+    public ContenidoNoInteractivo(String titulo, String contenido, Categoria categoria, String idUsuario) {
         super(titulo, contenido, categoria, idUsuario, "no_interactivo");
     }
 
     @JsonCreator
     public ContenidoNoInteractivo(
-            @JsonProperty("idContenido") int idContenido,
-            @JsonProperty("idUsuario") int idUsuario,
+            @JsonProperty("idContenido") String idContenido,
+            @JsonProperty("idUsuario") String idUsuario,
             @JsonProperty("titulo") String titulo,
             @JsonProperty("contenido") String contenido,
             @JsonProperty("categoria") Categoria categoria,
             @JsonProperty("estado") Estado estado
     ) {
         super(idContenido, idUsuario, titulo, contenido, categoria, estado, "no_interactivo");
+    }
+
+    @Override
+    public boolean activar() {
+        if (this.getEstado() == Estado.INACTIVO){
+            this.setEstado(Estado.ACTIVO);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean desactivar(){
+        if (this.getEstado() == Estado.ACTIVO){
+            this.setEstado(Estado.INACTIVO);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "No interactivo" +
+                ". ID: " + getIdContenido() +
+                ". ID usuario: " + getIdUsuario() +
+                ". Categoria: " + getCategoria() +
+                ". " + getTitulo();
     }
 }

@@ -10,13 +10,9 @@ import org.enumeradores.Estado;
 import org.clases.clasesContenido.Contenido;
 import org.clases.clasesContenido.ContenidoInteractivo;
 import org.clases.clasesContenido.ContenidoNoInteractivo;
-import org.interfaces.IIdentificable;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.controladorArchivos.Impresora.DEFAULT_PATH;
 
@@ -40,35 +36,36 @@ public class GestorRedSocial {
     //Metodos
     public void cargarDatosARedSocial(){
         Random random = new Random();
-        int ran = 0;
-        int ran2 = 0;
+        Faker faker = new Faker();
+        Integer ran = 0;
+        Integer ran2 = 0;
         Contenido contenidoAux;
         for(int i = 0; i < 10; i++){
-            Usuario usuario = new Usuario(Faker.instance().funnyName().toString(), Faker.instance().funnyName().toString() , Faker.instance().internet().emailAddress());
+            Usuario usuario = new Usuario(faker.funnyName().name(), faker.funnyName().name(), faker.internet().emailAddress());
             this.usuarios.add(usuario);
         }
         for(int i = 0; i < 25; i++){
             ran = random.nextInt(10);
-            contenidoAux = new ContenidoInteractivo(Faker.instance().book().title(), Faker.instance().lorem().characters(), Categoria.getRandomCategoria(), ran);
+            contenidoAux = new ContenidoInteractivo(faker.book().title(), faker.lorem().sentence(), Categoria.getRandomCategoria(), "U" + ran.toString());
             agregarContenido(contenidoAux);
-            agregarPublicacionAUsuario(buscarPorId(ran, Usuario.class), contenidoAux);
+            agregarPublicacionAUsuario(buscarUsuarioPorId("U" + ran.toString()), contenidoAux);
 
             ran = random.nextInt(10);
-            contenidoAux = new ContenidoNoInteractivo(Faker.instance().book().title(), Faker.instance().lorem().characters(), Categoria.getRandomCategoria(), ran);
+            contenidoAux = new ContenidoNoInteractivo(faker.book().title(), faker.lorem().sentence(), Categoria.getRandomCategoria(), "U" + ran.toString());
             agregarContenido(contenidoAux);
-            agregarPublicacionAUsuario(buscarPorId(ran, Usuario.class), contenidoAux);
+            agregarPublicacionAUsuario(buscarUsuarioPorId("U" + ran.toString()), contenidoAux);
         }
 
         for(int i = 0; i < 50; i++){
             ran = random.nextInt(49);
             ran2 = random.nextInt(9);
-            agregarComentario(buscarPorId(ran2, Usuario.class), buscarPorId(ran, Contenido.class), Faker.instance().lorem().characters() + Faker.instance().funnyName().toString());
+            agregarComentario(buscarUsuarioPorId("U" + ran2.toString()), buscarContenidoPorId("C" + ran.toString()), faker.lorem().sentence() + " " + faker.funnyName().name());
         }
 
         for(int i = 0; i < 80; i++){
             ran = random.nextInt(48);
             ran2 = random.nextInt(8);
-            likeDisLikeContenido(buscarPorId(ran2, Usuario.class), buscarPorId(ran, Contenido.class));
+            likeDisLikeContenido(buscarUsuarioPorId("U" + ran2.toString()), buscarContenidoPorId("C" + ran.toString()));
         }
     }
 
@@ -93,7 +90,8 @@ public class GestorRedSocial {
 
     public Usuario encontrarUsuario(String userName, String passWord){
         for(Usuario usuario : this.usuarios){
-            if(usuario.getUserName().equals(userName) && usuario.getPassword().equals(passWord)){
+            if(usuario.getUserName().equals(userName) && usuario.getPassword().equals(passWord) && usuario.getEstado() == Estado.ACTIVO){
+                //Le agregamos la verificacion de estado al ingreso
                 return usuario;
             }
         }
@@ -109,51 +107,9 @@ public class GestorRedSocial {
         return flag;
     }
 
-    public Contenido obtenerContenido(){
-        Contenido contenido = null;
-        Iterator<Contenido> iterador = obtenerIteradorContenido();
-        if(iterador.hasNext()){
-            contenido = iterador.next();
-        }
-        return contenido;
-    }
-
-    public Contenido avanzar(Contenido contenidoActual){
-        Contenido contenido = null;
-        boolean flagEncontrado = false;
-        Iterator<Contenido> iterator = obtenerIteradorContenido();
-        while (iterator.hasNext()) {
-            contenido = iterator.next();
-            if (flagEncontrado) {
-                return contenido;
-            }
-            if (contenido.equals(contenidoActual)) {
-                flagEncontrado = true;
-            }
-        }
-        return contenido;
-    }
-
-    public Contenido retroceder (Contenido contenidoActual){
-        Contenido contenido = contenidoActual;
-        Iterator<Contenido> iterator = obtenerIteradorContenido();
-        Contenido contenidoAnterior = contenidoActual;
-        while (iterator.hasNext()) {
-            contenido = iterator.next();
-            if (contenido.equals(contenidoActual)) {
-                return contenidoAnterior;
-            }
-            contenidoAnterior = contenido;
-        }
-
-        return contenido;
-    }
-
     // Método para ver el contenido actual
     public Iterator<Contenido> obtenerIteradorContenido() {
-        // Crear una copia de la colección de contenidos
-        Iterator<Contenido> iterator = this.contenidos.iterator();
-        return iterator;
+        return this.contenidos.iterator();
     }
 
     // Método para ver el contenido actual filtrando categorias y estado de contenido
@@ -164,6 +120,12 @@ public class GestorRedSocial {
                 .toList()
                 .iterator();
     }
+
+    public Iterator<Usuario> obtenerIteradorUsuarios() {
+        return this.usuarios.stream().toList().iterator();
+    }
+
+    public Iterator<Comentario> obtenerIteradorComentario(){return this.comentarios.stream().iterator();}
 
     public boolean agregarPublicacionAUsuario(Usuario usuario, Contenido contenido){
         boolean flag = false;
@@ -224,29 +186,45 @@ public class GestorRedSocial {
         }
     }
 
-    public <T extends IIdentificable> T buscarPorId(int id, Class<T> tipo) {
-        Stream<? extends IIdentificable> stream = null;
+//    public <T extends IIdentificable> T buscarPorId(String id) {
+//        Stream<? extends IIdentificable> stream = null;
+//
+//        switch (id.charAt(0)) {
+//            case 'U':
+//                stream = this.usuarios.stream();
+//                break;
+//            case 'C':
+//                stream = this.contenidos.stream();
+//                break;
+//            case 'M':
+//                stream = this.comentarios.stream();
+//                break;
+//        }
+//
+//        if (stream != null) {
+//            Optional<? extends IIdentificable> result = stream.filter(item -> item.getId().equals(id)).findFirst();
+//            return result.orElse(null);
+//        }
+//        return null;
+//    }
 
-        if (tipo == Usuario.class) {
-            stream = this.usuarios.stream();
-        } else if (tipo == Comentario.class) {
-            stream = this.comentarios.stream();
-        } else if (tipo == Contenido.class) {
-            stream = this.contenidos.stream();
-        }
-
-        if (stream != null) {
-            Optional<? extends IIdentificable> result = stream.filter(item -> item.getId() == id).findFirst();
-            if (result.isPresent()) {
-                return tipo.cast(result.get());
-            }
-        }
-
-        return null;
+    public Usuario buscarUsuarioPorId(String dato) {
+        Optional<Usuario> result = usuarios.stream().filter(item -> item.getIdUsuario().equalsIgnoreCase(dato) || item.getUserName().equalsIgnoreCase(dato)).findFirst();
+        return result.orElse(null);
     }
 
-    public void actualizarDatosUsuario(String nuevoUserName, String nuevaPassword, String nuevoMail, int id){
-        Usuario usuario = buscarPorId(id, Usuario.class);
+    public Comentario buscarComentarioPorId(String id) {
+        Optional<Comentario> result = comentarios.stream().filter(item -> item.getIdComentario().equalsIgnoreCase(id)).findFirst();
+        return result.orElse(null);
+    }
+
+    public Contenido buscarContenidoPorId(String id) {
+        Optional<Contenido> result = contenidos.stream().filter(item -> item.getIdContenido().equalsIgnoreCase(id)).findFirst();
+        return result.orElse(null);
+    }
+
+    public void actualizarDatosUsuario(String nuevoUserName, String nuevaPassword, String nuevoMail, String id){
+        Usuario usuario = buscarUsuarioPorId(id);
         usuario.setMail(nuevoMail);
         usuario.setPassword(nuevaPassword);
         usuario.setUserName(nuevoUserName);
@@ -254,7 +232,7 @@ public class GestorRedSocial {
 
     public List<Comentario> devolverListaDeComentarioDeContenido(ContenidoInteractivo contenido){
         List<Comentario> comentariosOrdenados = comentarios.stream()
-                .filter(comentario -> comentario.getIdContenido() == contenido.getIdContenido())
+                .filter(comentario -> comentario.getIdContenido().equals(contenido.getIdContenido()))
                 .toList();
 
         return comentariosOrdenados;
@@ -280,5 +258,6 @@ public class GestorRedSocial {
             e.printStackTrace();
         }
     }
+
 }
 

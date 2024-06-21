@@ -12,7 +12,6 @@ public class RedSocial {
         gestorRedSocial = new GestorRedSocial();
         gestorRedSocial.cargarDatosEnJSON();
         //gestorRedSocial.cargarDatosARedSocial();
-        //gestorRedSocial.guardarDatosEnJSON();
         this.panelGrafico = new PanelGrafico(gestorRedSocial);
     }
 

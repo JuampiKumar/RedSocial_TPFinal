@@ -9,17 +9,18 @@ import org.clases.clasesUsuarios.Usuario;
 import org.enumeradores.Categoria;
 import org.clases.clasesContenido.Contenido;
 import org.enumeradores.Estado;
+import org.interfaces.IEstado;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class ContenidoInteractivo extends Contenido {
+public class ContenidoInteractivo extends Contenido implements IEstado {
     //Atributos
     private int likes;
-    private List<Integer> comentarios;
+    private List<String> comentarios;
 
     //Constructor
-    public ContenidoInteractivo(String titulo, String contenido, Categoria categoria, int idUsuario) {
+    public ContenidoInteractivo(String titulo, String contenido, Categoria categoria, String idUsuario) {
         super(titulo, contenido, categoria, idUsuario, "interactivo");
         this.likes = 0;
         this.comentarios = new LinkedList<>();
@@ -27,15 +28,14 @@ public class ContenidoInteractivo extends Contenido {
 
     @JsonCreator
     public ContenidoInteractivo(
-            @JsonProperty("idContenido") int idContenido,
-            @JsonProperty("idUsuario") int idUsuario,
+            @JsonProperty("idContenido") String idContenido,
+            @JsonProperty("idUsuario") String idUsuario,
             @JsonProperty("titulo") String titulo,
             @JsonProperty("contenido") String contenido,
             @JsonProperty("categoria") Categoria categoria,
             @JsonProperty("estado") Estado estado,
-            @JsonProperty("idIncremental") int idIncremental,
             @JsonProperty("likes") int likes,
-            @JsonProperty("comentarios") List<Integer> comentarios
+            @JsonProperty("comentarios") List<String> comentarios
     ) {
         super(idContenido, idUsuario, titulo, contenido, categoria, estado, "interactivo");
         this.likes = likes;
@@ -51,7 +51,7 @@ public class ContenidoInteractivo extends Contenido {
         this.likes = likes;
     }
 
-    public List<Integer> getComentarios() {
+    public List<String> getComentarios() {
         return comentarios;
     }
 
@@ -60,7 +60,34 @@ public class ContenidoInteractivo extends Contenido {
     }
 
     public void eliminarComentario(Comentario comentario){
-        this.comentarios.remove((Integer)comentario.getIdComentario());
+        this.comentarios.remove(comentario.getIdComentario());
     }
 
+    @Override
+    public boolean activar() {
+        if (this.getEstado() == Estado.INACTIVO){
+            this.setEstado(Estado.ACTIVO);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean desactivar(){
+        if (this.getEstado() == Estado.ACTIVO){
+            this.setEstado(Estado.INACTIVO);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Interactivo" +
+                ". ID: " + getIdContenido() +
+                ". ID usuario: " + getIdUsuario() +
+                ". Categoria: " + getCategoria() +
+                ". ID de Comentarios: " + getComentarios() +
+                ". " + getTitulo();
+    }
 }

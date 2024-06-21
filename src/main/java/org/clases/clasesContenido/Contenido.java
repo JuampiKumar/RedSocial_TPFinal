@@ -1,11 +1,9 @@
 package org.clases.clasesContenido;
 
 import com.fasterxml.jackson.annotation.*;
-import com.google.gson.annotations.Expose;
-import org.clases.clasesUsuarios.Usuario;
 import org.enumeradores.Categoria;
 import org.enumeradores.Estado;
-import org.interfaces.IIdentificable;
+import org.interfaces.IEstado;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -17,12 +15,12 @@ import java.util.Objects;
         @JsonSubTypes.Type(value = ContenidoInteractivo.class, name = "interactivo"),
         @JsonSubTypes.Type(value = ContenidoNoInteractivo.class, name = "no_interactivo")
 })
-public abstract class Contenido implements Comparable<Contenido>, IIdentificable, Serializable {
+public abstract class Contenido implements Comparable<Contenido>, Serializable, IEstado{
     //Atributos
     @JsonProperty("tipo")
     private String tipo;
-    private final int idContenido;
-    private int idUsuario;
+    private final String idContenido;
+    private String idUsuario;
     private String titulo;
     private String contenido;
     private Categoria categoria;
@@ -30,8 +28,8 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
     private static int idIncremental = 0;
 
     //Constructor
-    public Contenido(String titulo, String contenido, Categoria categoria, int idUsusario, String tipo) {
-        this.idContenido = idIncremental;
+    public Contenido(String titulo, String contenido, Categoria categoria, String idUsusario, String tipo) {
+        this.idContenido =  "C" + idIncremental;
         this.titulo = titulo;
         this.contenido = contenido;
         this.categoria = categoria;
@@ -43,8 +41,8 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
 
     @JsonCreator
     public Contenido(
-            @JsonProperty("idContenido") int idContenido,
-            @JsonProperty("idUsuario") int idUsuario,
+            @JsonProperty("idContenido") String idContenido,
+            @JsonProperty("idUsuario") String idUsuario,
             @JsonProperty("titulo") String titulo,
             @JsonProperty("contenido") String contenido,
             @JsonProperty("categoria") Categoria categoria,
@@ -63,7 +61,7 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
 
     //Getters y Setters
 
-    public int getIdContenido() {
+    public String getIdContenido() {
         return idContenido;
     }
 
@@ -99,7 +97,7 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
         this.estado = estado;
     }
 
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
@@ -107,11 +105,7 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
         return tipo;
     }
 
-    @JsonIgnore
-    @Override
-    public int getId() {
-        return getIdContenido();
-    }
+
 
     //Overide
     @Override
@@ -127,7 +121,7 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Contenido contenido)) return false;
-        return idContenido == contenido.idContenido;
+        return idContenido.equals(contenido.idContenido);
     }
 
     @Override
@@ -137,6 +131,10 @@ public abstract class Contenido implements Comparable<Contenido>, IIdentificable
 
     @Override
     public int compareTo(Contenido o) {
-        return Integer.compare(o.idContenido,this.idContenido);
+        Integer numero = Integer.parseInt(this.idContenido.substring(1));
+        Integer numero2 = Integer.parseInt(o.idContenido.substring(1));
+        System.out.println(numero);
+        return numero2.compareTo(numero);
     }
+
 }
