@@ -10,6 +10,7 @@ import org.enumeradores.Estado;
 import org.clases.clasesContenido.Contenido;
 import org.clases.clasesContenido.ContenidoInteractivo;
 import org.clases.clasesContenido.ContenidoNoInteractivo;
+import org.excepciones.ErrorValidacionException;
 
 import java.io.IOException;
 import java.util.*;
@@ -69,10 +70,14 @@ public class GestorRedSocial {
         }
     }
 
-    public void registrarUsuarioNuevo(String userName, String passWord, String correo){
-        if(validarUsuario(userName) == false  && validarMail(correo) == true){
-            this.usuarios.add(new Usuario(userName, passWord, correo));
+    public void registrarUsuarioNuevo(String userName, String passWord, String correo) throws ErrorValidacionException {
+        if (!validarMail(correo)) {
+            throw new ErrorValidacionException("Correo electrónico no válido.");
         }
+        if (validarUsuario(userName)) {
+            throw new ErrorValidacionException("El nombre de usuario ya existe.");
+        }
+        this.usuarios.add(new Usuario(userName, passWord, correo));
     }
 
     private boolean validarUsuario(String userName){
@@ -88,14 +93,13 @@ public class GestorRedSocial {
         return correo.contains("@") && correo.contains(".com");
     }
 
-    public Usuario encontrarUsuario(String userName, String passWord){
+    public Usuario encontrarUsuario(String userName, String passWord) throws ErrorValidacionException {
         for(Usuario usuario : this.usuarios){
-            if(usuario.getUserName().equals(userName) && usuario.getPassword().equals(passWord) && usuario.getEstado() == Estado.ACTIVO){
-                //Le agregamos la verificacion de estado al ingreso
+            if(usuario.getUserName().equals(userName) && usuario.getPassword().equals(passWord)){
                 return usuario;
             }
         }
-        return null;
+        throw new ErrorValidacionException("Nombre de usuario o contraseña incorrectos.");
     }
 
     public boolean agregarContenido(Contenido contenido){

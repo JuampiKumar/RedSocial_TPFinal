@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
+import org.excepciones.ErrorValidacionException;
 
 
 public class PanelGrafico extends JFrame {
@@ -191,8 +192,14 @@ public class PanelGrafico extends JFrame {
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword()); // La contraseña se obtiene de manera diferente debido al uso de JPasswordField
                 String correo = correoField.getText();
-                gestor.registrarUsuarioNuevo(username,password, correo);
-                menuPrincipal();
+
+                try {
+                    gestor.registrarUsuarioNuevo(username, password, correo);
+                    menuPrincipal();
+                } catch (ErrorValidacionException ex) {
+                    JOptionPane.showMessageDialog(panelMenuRegistro, ex.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
+                    // Limpiar los campos o tomar otras acciones según sea necesario
+                }
             }
         });
 
@@ -280,14 +287,14 @@ public class PanelGrafico extends JFrame {
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword()); // La contraseña se obtiene de manera diferente debido al uso de JPasswordField
 
-                if(gestor.encontrarUsuario(username, password) != null){
+                try {
                     usuario = gestor.encontrarUsuario(username, password);
                     menuPerfil();
-                }else{
-                    menuIngreso();
+                } catch (ErrorValidacionException ex) {
+                    JOptionPane.showMessageDialog(panelMenuIngreso, ex.getMessage(), "Error de Ingreso", JOptionPane.ERROR_MESSAGE);
+                    usernameField.setText("");
+                    passwordField.setText("");
                 }
-
-
             }
         });
 
@@ -498,6 +505,8 @@ public class PanelGrafico extends JFrame {
                             actualizarUsuarios.run();
                         });
                     }
+                }else{
+                    JOptionPane.showMessageDialog(panelMenuUsuarios,"USUARIO NO ENCONTRADO" , "Error de busqueda", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -617,6 +626,8 @@ public class PanelGrafico extends JFrame {
                             actualizarContenidos.run();
                         });
                     }
+                }else{
+                    JOptionPane.showMessageDialog(panelMenuContenidos,"CONTENIDO NO ENCONTRADO" , "Error de busqueda", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -736,6 +747,9 @@ public class PanelGrafico extends JFrame {
                             actualizarComentarios.run();
                         });
                     }
+                }
+                else{
+                    JOptionPane.showMessageDialog(panelMenuComentarios,"COMENTARIO NO ENCONTRADO" , "Error de busqueda", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -866,6 +880,7 @@ public class PanelGrafico extends JFrame {
                     }
                     gestor.agregarContenido(publicacion);
                     gestor.agregarPublicacionAUsuario(usuario, publicacion); //Se llaman metodos del gestor
+                    JOptionPane.showMessageDialog(panelMenuPublicar, "Contenido publicado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     menuPerfil();
                 }else{
                     JOptionPane.showMessageDialog(null, "COMPLETAR EL CAMPO TITULO Y CONTENIDO");
@@ -925,8 +940,12 @@ public class PanelGrafico extends JFrame {
 
                 contenidoArea.setText(contenidoActual.getContenido());
 
-                JButton comentariosButton = new JButton("COMENTARIOS");
-                JButton likeButton = new JButton(":)");
+                ImageIcon corazon = new ImageIcon("heart.png");
+                ImageIcon comment = new ImageIcon("comment.png");
+                JButton comentariosButton = new JButton();
+                JButton likeButton = new JButton();
+                likeButton.setIcon(corazon);
+                comentariosButton.setIcon(comment);
                 //Creacion del boton de DAR DE BAJA (tiene que ser solo visible para Administrador)
                 JButton activoButton = new JButton("ACTIVAR - DESACTIVAR");
 
@@ -1411,6 +1430,7 @@ public class PanelGrafico extends JFrame {
                 String nuevoMail = mailField.getText();
                 // Actualizar los datos del usuario
                 gestor.actualizarDatosUsuario(nuevoUserName, nuevaPassword, nuevoMail, usuario.getIdUsuario());
+                JOptionPane.showMessageDialog(panelModificarInfo, "Modificaciones guardadas correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 // Volver al menú de perfil
                 menuVerMiInfo();
             }
