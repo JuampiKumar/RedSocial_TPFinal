@@ -974,7 +974,8 @@ public class PanelGrafico extends JFrame {
                             JLabel comentarioUsuarioLabel = new JLabel(gestor.buscarUsuarioPorId(comentario.getIdUsuario()).getUserName() + ": ");
                             JButton desactivarComentarioUsuario = new JButton("DESACTIVAR");
                             JTextArea comentarioArea = new JTextArea(comentario.getComentario());
-
+                            JSeparator separatorComentarios = new JSeparator();
+                            comentarioUsuarioLabel.setPreferredSize(new Dimension(150,20));
                             desactivarComentarioUsuario.setPreferredSize(new Dimension(150, 20));
 
                             comentarioArea.setLineWrap(true);  // Habilita el salto de línea automático
@@ -995,9 +996,15 @@ public class PanelGrafico extends JFrame {
 
                             gbcComentario.gridx = 1;
                             gbcComentario.anchor = GridBagConstraints.EAST;
-                            gbcComentario.fill = GridBagConstraints.VERTICAL;  // Para que el JTextArea utilice el espacio horizontal disponible
-                            //gbcComentario.weightx = 1.0;  // Distribuye el espacio horizontalmente
                             panelComentarioIndividual.add(comentarioArea, gbcComentario);
+                            gbcComentario.gridx = 0;
+                            gbcComentario.gridy = 1;
+                            gbcComentario.insets = new Insets(0,0,0,0);
+                            gbcComentario.gridwidth = 2;
+                            gbcComentario.fill = GridBagConstraints.HORIZONTAL;  // Para que el JTextArea utilice el espacio horizontal disponible
+                            //gbcComentario.weightx = 1.0;  // Distribuye el espacio horizontalmente
+                            panelComentarioIndividual.add(separatorComentarios, gbcComentario);
+
 
                             if(!usuario.getAdmin()){
                                 desactivarComentarioUsuario.setVisible(false);
