@@ -363,6 +363,7 @@ public class PanelGrafico extends JFrame {
         if(!usuario.getAdmin()){
             buscarUsuarioButton.setVisible(false);
             buscarContenidoButton.setVisible(false);
+            buscarComentarioButton.setVisible(false);
         }
 
         // Definir ActionListener para cada botón
