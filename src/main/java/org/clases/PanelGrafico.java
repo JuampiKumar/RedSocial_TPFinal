@@ -5,6 +5,7 @@ import org.clases.clasesContenido.ContenidoInteractivo;
 import org.clases.clasesContenido.ContenidoNoInteractivo;
 import org.clases.clasesUsuarios.Usuario;
 import org.clases.gestores.GestorRedSocial;
+import org.clases.PanelConImagen;
 import org.enumeradores.Categoria;
 import org.enumeradores.Estado;
 import org.enumeradores.TipoContenido;
@@ -36,6 +37,9 @@ public class PanelGrafico extends JFrame {
     private final int LIMITE_TRES = 30;
     private final int LIMITE_CONTENIDO = 350;
     private final int INSET_FINAL = 10;
+    private final Font buttonFont = new Font("Comic Sans MS", Font.BOLD, 16);
+    private final Color rosaPersonalizado = new Color(255,198,217);
+    private final Color rosaTexto = new Color(176,101,127);
 
     // Configurar la ventana principal
     public PanelGrafico(GestorRedSocial gestor) {
@@ -50,7 +54,8 @@ public class PanelGrafico extends JFrame {
 
     public void menuPrincipal() { //Menu principal
         //Creamos y seteamos la configuracion del panel de este menu
-        JPanel panelMenuPrincipal = new JPanel();
+        //JPanel panelMenuPrincipal = new JPanel();
+        PanelConImagen panelMenuPrincipal = new PanelConImagen(true);
         panelMenuPrincipal.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -67,6 +72,23 @@ public class PanelGrafico extends JFrame {
         registrarseButton.setPreferredSize(buttonSize);
         ingresarButton.setPreferredSize(buttonSize);
         salirButton.setPreferredSize(buttonSize);
+
+        //Cambiar fuente de los botones
+
+        registrarseButton.setFont(buttonFont);
+        ingresarButton.setFont(buttonFont);
+        salirButton.setFont(buttonFont);
+
+        //Cambiar el color del texto de los botones
+
+        registrarseButton.setForeground(rosaTexto);
+        ingresarButton.setForeground(rosaTexto);
+        salirButton.setForeground(rosaTexto);
+
+        //Cambiar el color de fondo de los botones
+        registrarseButton.setBackground(Color.WHITE);
+        ingresarButton.setBackground(Color.WHITE);
+        salirButton.setBackground(Color.WHITE);
 
         //Agregamos al panel los elementos
         gbc.gridx = 0;
@@ -106,7 +128,7 @@ public class PanelGrafico extends JFrame {
 
     public void menuRegistro() { //Menu regustro de usuario
         //Creamos y seteamos la configuracion del panel de este menu
-        JPanel panelMenuRegistro = new JPanel();
+        PanelConImagen panelMenuRegistro = new PanelConImagen(false);
         panelMenuRegistro.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -116,10 +138,16 @@ public class PanelGrafico extends JFrame {
         // Crear elementos para el menú de registro
         JLabel usernameLabel = new JLabel("NOMBRE DE USUARIO:");
         JTextField usernameField = new JTextField();
+        usernameLabel.setFont(buttonFont);
+        usernameLabel.setForeground(rosaTexto);
         JLabel passwordLabel = new JLabel("CONTRASEÑA:");
         JPasswordField passwordField = new JPasswordField();
+        passwordLabel.setFont(buttonFont);
+        passwordLabel.setForeground(rosaTexto);
         JLabel correoLabel = new JLabel("CORREO:");
         JTextField correoField = new JTextField();
+        correoLabel.setFont(buttonFont);
+        correoLabel.setForeground(rosaTexto);
         JButton registrarButton = new JButton("REGISTRAR");
         JButton salirButton = new JButton("SALIR");
 
@@ -136,6 +164,15 @@ public class PanelGrafico extends JFrame {
         setCharacterLimit(usernameField, LIMITE_DOS);
         setCharacterLimit(passwordField, LIMITE_DOS);
         setCharacterLimit(correoField, LIMITE_TRES);
+
+        registrarButton.setFont(buttonFont);
+        salirButton.setFont(buttonFont);
+
+        registrarButton.setForeground(rosaTexto);
+        salirButton.setForeground(rosaTexto);
+
+        registrarButton.setBackground(Color.WHITE);
+        salirButton.setBackground(Color.WHITE);
 
         //Agregamos al panel del menuRegistro los elementos
         gbc.gridx = 0;
@@ -216,7 +253,7 @@ public class PanelGrafico extends JFrame {
 
     public void menuIngreso() { //Menu de Ingreso de usuario
         //Creamos y seteamos la configuracion del panel del menuIngresp
-        JPanel panelMenuIngreso = new JPanel();
+        PanelConImagen panelMenuIngreso = new PanelConImagen(false);
         panelMenuIngreso.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -225,8 +262,12 @@ public class PanelGrafico extends JFrame {
 
         // Crear elementos para el menú de ingreso
         JLabel usernameLabel = new JLabel("NOMBRE DE USUARIO:");
+        usernameLabel.setFont(buttonFont);
+        usernameLabel.setForeground(rosaTexto);
         JTextField usernameField = new JTextField();
         JLabel passwordLabel = new JLabel("CONTRASEÑA:");
+        passwordLabel.setFont(buttonFont);
+        passwordLabel.setForeground(rosaTexto);
         JPasswordField passwordField = new JPasswordField();
         JButton ingresarButton = new JButton("INGRESAR");
         JButton salirButton = new JButton("SALIR");
@@ -242,6 +283,15 @@ public class PanelGrafico extends JFrame {
 
         setCharacterLimit(usernameField, LIMITE_DOS);
         setCharacterLimit(passwordField, LIMITE_DOS);
+
+        ingresarButton.setFont(buttonFont);
+        salirButton.setFont(buttonFont);
+
+        ingresarButton.setForeground(rosaTexto);
+        salirButton.setForeground(rosaTexto);
+
+        ingresarButton.setBackground(Color.WHITE);
+        salirButton.setBackground(Color.WHITE);
 
         //Agregamos al panel los elementos
         gbc.gridx = 0;
@@ -311,7 +361,7 @@ public class PanelGrafico extends JFrame {
 
     public void menuPerfil(){ //Menu perfil del usuario ingresado
         //Se crea y setea la configuracion del panel del menuPerfil
-        JPanel panelMenuPerfil = new JPanel();
+        PanelConImagen panelMenuPerfil = new PanelConImagen(false);
         panelMenuPerfil.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(INSET_FINAL, INSET_FINAL, INSET_FINAL, INSET_FINAL);
@@ -319,11 +369,11 @@ public class PanelGrafico extends JFrame {
 
         // Crear botones para las opciones del menú de perfil
         JButton publicarButton = new JButton("PUBLICAR");
-        JButton verPublicacionesButton = new JButton("VER PUBLICACIONES");
+        JButton verPublicacionesButton = new JButton("PUBLICACIONES");
         JButton miInfoButton = new JButton("MI INFORMACIÓN");
-        JButton buscarUsuarioButton = new JButton("USUARIOS");
-        JButton buscarContenidoButton = new JButton("CONTENIDOS");
-        JButton buscarComentarioButton = new JButton("COMENTARIOS");
+        JButton buscarUsuarioButton = new JButton("USER LIST");
+        JButton buscarContenidoButton = new JButton("CONTENT LIST");
+        JButton buscarComentarioButton = new JButton("COMMENT LIST");
         JButton salirButton = new JButton("SALIR");
 
         //Definimos las dimensiones de los botones del panel
@@ -335,6 +385,32 @@ public class PanelGrafico extends JFrame {
         buscarContenidoButton.setPreferredSize(buttonSize);
         buscarComentarioButton.setPreferredSize(buttonSize);
         salirButton.setPreferredSize(buttonSize);
+
+        publicarButton.setFont(buttonFont);
+        verPublicacionesButton.setFont(buttonFont);
+        miInfoButton.setFont(buttonFont);
+        buscarUsuarioButton.setFont(buttonFont);
+        buscarContenidoButton.setFont(buttonFont);
+        buscarComentarioButton.setFont(buttonFont);
+        salirButton.setFont(buttonFont);
+
+        // Configuración del color de texto rosa para todos los botones
+        publicarButton.setForeground(rosaTexto);
+        verPublicacionesButton.setForeground(rosaTexto);
+        miInfoButton.setForeground(rosaTexto);
+        buscarUsuarioButton.setForeground(rosaTexto);
+        buscarContenidoButton.setForeground(rosaTexto);
+        buscarComentarioButton.setForeground(rosaTexto);
+        salirButton.setForeground(rosaTexto);
+
+        // Configuración del fondo blanco para todos los botones
+        publicarButton.setBackground(Color.WHITE);
+        verPublicacionesButton.setBackground(Color.WHITE);
+        miInfoButton.setBackground(Color.WHITE);
+        buscarUsuarioButton.setBackground(Color.WHITE);
+        buscarContenidoButton.setBackground(Color.WHITE);
+        buscarComentarioButton.setBackground(Color.WHITE);
+        salirButton.setBackground(Color.WHITE);
 
         //Agregamos al panel los elementos
         gbc.gridx = 0;
@@ -417,6 +493,7 @@ public class PanelGrafico extends JFrame {
     public void menuUsuarios() {
         // Crear y configurar el panel del menú principal
         JPanel panelMenuUsuarios = new JPanel(new BorderLayout());
+        panelMenuUsuarios.setBackground(Color.BLACK);
 
         // Crear los botones del menú principal
         JButton buscarButton = new JButton("BUSCAR USUARIO");
@@ -429,6 +506,7 @@ public class PanelGrafico extends JFrame {
 
         // Crear el panel que contendrá los JLabels de los usuarios
         JPanel usuariosPanel = new JPanel();
+        panelMenuUsuarios.setBackground(Color.BLACK);
         usuariosPanel.setLayout(new BoxLayout(usuariosPanel, BoxLayout.Y_AXIS));
 
         Runnable actualizarUsuarios = () -> {
@@ -441,10 +519,12 @@ public class PanelGrafico extends JFrame {
 
             //Se crea un panel para almacenar individualmente los comentarios
             JPanel panelUsuarioIndividual = new JPanel(new BorderLayout());
+            panelUsuarioIndividual.setBackground(Color.BLACK);
             panelUsuarioIndividual.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
             //Se crean los elementos del panel individual
             JLabel usuarioLabel = new JLabel(user.toString() + " Estado: " + user.getEstado());
+            usuarioLabel.setForeground(Color.GREEN);
             usuarioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
             // Añadir el JLabel al panel individual
@@ -455,7 +535,8 @@ public class PanelGrafico extends JFrame {
 
             // Añadir un separador después de cada usuario
             JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-            separator.setPreferredSize(new Dimension(usuariosPanel.getWidth(), 10));
+            separator.setPreferredSize(new Dimension(usuariosPanel.getWidth(), 4));
+            separator.setBackground(Color.BLACK);
             usuariosPanel.add(separator);
         };
                 usuariosPanel.revalidate();
@@ -469,6 +550,7 @@ public class PanelGrafico extends JFrame {
 
         // Crear un JScrollPane para el panel de usuarios
         JScrollPane scrollPane = new JScrollPane(usuariosPanel);
+        scrollPane.setBackground(Color.BLACK);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Ajustar la velocidad de desplazamiento
@@ -524,6 +606,7 @@ public class PanelGrafico extends JFrame {
     public void menuContenidos() {
         // Crear y configurar el panel del menú principal
         JPanel panelMenuContenidos = new JPanel(new BorderLayout());
+        panelMenuContenidos.setBackground(Color.BLACK);
 
         // Crear los botones del menú principal
         JButton buscarButton = new JButton("BUSCAR CONTENIDO");
@@ -536,6 +619,7 @@ public class PanelGrafico extends JFrame {
 
         // Crear el panel que contendrá los JLabels de los usuarios
         JPanel contenidosPanel = new JPanel();
+        contenidosPanel.setBackground(Color.BLACK);
         contenidosPanel.setLayout(new BoxLayout(contenidosPanel, BoxLayout.Y_AXIS));
 
         Runnable actualizarContenidos = () -> {
@@ -548,10 +632,12 @@ public class PanelGrafico extends JFrame {
 
                 //Se crea un panel para almacenar individualmente los comentarios
                 JPanel panelContenidoIndividual = new JPanel(new BorderLayout());
+                panelContenidoIndividual.setBackground(Color.BLACK);
                 panelContenidoIndividual.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                 String contenidoTruncado = cont.getContenido().length() > 20 ? cont.getContenido().substring(0, 20) + "..." : cont.getContenido();
                 //Se crean los elementos del panel individual
                 JLabel usuarioLabel = new JLabel(cont.toString() + ". " + contenidoTruncado + " Estado: " + cont.getEstado());
+                usuarioLabel.setForeground(Color.GREEN);
                 usuarioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
                 // Añadir el JLabel al panel individual
@@ -576,6 +662,7 @@ public class PanelGrafico extends JFrame {
 
         // Crear un JScrollPane para el panel de usuarios
         JScrollPane scrollPane = new JScrollPane(contenidosPanel);
+        scrollPane.setBackground(Color.BLACK);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Ajustar la velocidad de desplazamiento
@@ -643,6 +730,7 @@ public class PanelGrafico extends JFrame {
     public void menuComentarios() {
         // Crear y configurar el panel del menú principal
         JPanel panelMenuComentarios = new JPanel(new BorderLayout());
+        panelMenuComentarios.setBackground(Color.BLACK);
 
         // Crear los botones del menú principal
         JButton buscarButton = new JButton("BUSCAR COMENTARIOS");
@@ -655,6 +743,7 @@ public class PanelGrafico extends JFrame {
 
         // Crear el panel que contendrá los JLabels de los usuarios
         JPanel comentariosPanel = new JPanel();
+        comentariosPanel.setBackground(Color.BLACK);
         comentariosPanel.setLayout(new BoxLayout(comentariosPanel, BoxLayout.Y_AXIS));
 
         Runnable actualizarComentarios = () -> {
@@ -667,10 +756,12 @@ public class PanelGrafico extends JFrame {
 
                     //Se crea un panel para almacenar individualmente los comentarios
                     JPanel panelContenidoIndividual = new JPanel(new BorderLayout());
+                    panelContenidoIndividual.setBackground(Color.BLACK);
                     panelContenidoIndividual.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     String contenidoTruncado = coment.getComentario().length() > 20 ? coment.getComentario().substring(0, 20) + "..." : coment.getComentario();
                     //Se crean los elementos del panel individual
                     JLabel usuarioLabel = new JLabel(coment.toString() + ". " + contenidoTruncado + " Estado: " + coment.getEstado());
+                    usuarioLabel.setForeground(Color.GREEN);
                     usuarioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
                     // Añadir el JLabel al panel individual
@@ -695,6 +786,7 @@ public class PanelGrafico extends JFrame {
 
         // Crear un JScrollPane para el panel de usuarios
         JScrollPane scrollPane = new JScrollPane(comentariosPanel);
+        scrollPane.setBackground(Color.BLACK);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Ajustar la velocidad de desplazamiento
@@ -764,7 +856,7 @@ public class PanelGrafico extends JFrame {
 
     public void menuPublicar() { //Menu publicar
         //Creamos y seteamos la configuracion del panel del menuPublicar
-        JPanel panelMenuPublicar = new JPanel();
+        PanelConImagen panelMenuPublicar = new PanelConImagen(false);
         panelMenuPublicar.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(INSET_FINAL, INSET_FINAL, INSET_FINAL, INSET_FINAL);
@@ -772,12 +864,30 @@ public class PanelGrafico extends JFrame {
 
         //Creamos los elementos del panel
         JLabel tipoLabel = new JLabel("INTERACCIONES:");
+        tipoLabel.setFont(buttonFont);
+        tipoLabel.setForeground(rosaTexto);
+
         JLabel tituloLabel = new JLabel("TÍTULO:");
+        tituloLabel.setFont(buttonFont);
+        tituloLabel.setForeground(rosaTexto);
+
         JLabel contenidoLabel = new JLabel("CONTENIDO:");
+        contenidoLabel.setFont(buttonFont);
+        contenidoLabel.setForeground(rosaTexto);
+
         JLabel categoriaLabel = new JLabel("CATEGORIA:");
+        categoriaLabel.setFont(buttonFont);
+        categoriaLabel.setForeground(rosaTexto);
 
         JRadioButton comunicadoRadioButton = new JRadioButton("NO");
+        comunicadoRadioButton.setFont(buttonFont);
+        comunicadoRadioButton.setForeground(rosaTexto);
+        comunicadoRadioButton.setBackground(rosaPersonalizado);
+
         JRadioButton publicacionRadioButton = new JRadioButton("SI");
+        publicacionRadioButton.setFont(buttonFont);
+        publicacionRadioButton.setForeground(rosaTexto);
+        publicacionRadioButton.setBackground(rosaPersonalizado);
         ButtonGroup tipoGroup = new ButtonGroup(); //Creamos un grupo para trabajar en conjunto los radioButton
         tipoGroup.add(comunicadoRadioButton);
         tipoGroup.add(publicacionRadioButton);
@@ -787,6 +897,9 @@ public class PanelGrafico extends JFrame {
 
         Categoria[] categorias = {Categoria.ACTUALIDAD, Categoria.DEPORTE, Categoria.PELICULAS, Categoria.TECNOLOGIA, Categoria.VIDEOJUEGOS, Categoria.OTROS};
         JComboBox<Categoria> categoriaComboBox = new JComboBox<>(categorias);
+        categoriaComboBox.setFont(buttonFont);
+        categoriaComboBox.setForeground(rosaTexto);
+        categoriaComboBox.setBackground(Color.WHITE);
 
         JButton publicarButton = new JButton("PUBLICAR");
         JButton salirButton = new JButton("SALIR");
@@ -803,6 +916,18 @@ public class PanelGrafico extends JFrame {
         contenidoArea.setPreferredSize(new Dimension(AREA_WIDTH, AREA_HEIGHT));
         setCharacterLimit(tituloField, LIMITE_UNO);
         setCharacterLimit(contenidoArea, LIMITE_CONTENIDO);
+
+        // Configuración de la fuente y color de texto para los botones
+        publicarButton.setFont(buttonFont);
+        salirButton.setFont(buttonFont);
+
+        publicarButton.setForeground(rosaTexto);
+        salirButton.setForeground(rosaTexto);
+
+        // Configuración del fondo blanco para los botones
+        publicarButton.setBackground(Color.WHITE);
+        salirButton.setBackground(Color.WHITE);
+
         //Agregamos al panel los elementos
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -841,6 +966,7 @@ public class PanelGrafico extends JFrame {
         gbc.gridwidth = 2;
 
         JPanel panelMenuPublicarBotones = new JPanel();
+        panelMenuPublicarBotones.setBackground(rosaPersonalizado);
         panelMenuPublicarBotones.setLayout(new GridBagLayout());
         GridBagConstraints gbcBotones = new GridBagConstraints();
         gbcBotones.insets = new Insets(INSET_FINAL, INSET_FINAL, INSET_FINAL, INSET_FINAL);
@@ -896,6 +1022,7 @@ public class PanelGrafico extends JFrame {
     public void menuVerContenido() { //Menu para ver contenido
         //Se crea y setea la configuracion del panel principal del menuVerContenido
         JPanel panelVerContenido = new JPanel();
+        panelVerContenido.setBackground(rosaPersonalizado);
         panelVerContenido.setLayout(new BoxLayout(panelVerContenido, BoxLayout.Y_AXIS));
         //Se trae un iterador de la coleccion de contenidos del gestor
         Iterator<Contenido> iterator = gestor.obtenerIteradorContenido(usuario);
@@ -907,15 +1034,19 @@ public class PanelGrafico extends JFrame {
 
                 //Panel de comentarios que va a tener la opcion de crear comentario y un panel interno con cada comentario
                 JPanel panelComentarios = new JPanel();
+                panelComentarios.setBackground(rosaPersonalizado);
                 panelComentarios.setLayout(new GridBagLayout());
                 GridBagConstraints gbcComentarios = new GridBagConstraints();
                 gbcComentarios.insets = new Insets(5, 5,  5,5);
                 gbcComentarios.anchor = GridBagConstraints.WEST;
                 panelComentarios.setVisible(false);
                 JButton comentarioComentar = new JButton("COMENTAR");
+                comentarioComentar.setFont(buttonFont);
+                comentarioComentar.setForeground(rosaTexto);
 
                 //Panel donde se vera el contenido, que a su vez tendra el panel de comentarios (panelComentarios)
                 JPanel panelContenido = new JPanel();
+                panelContenido.setBackground(rosaPersonalizado);
                 panelContenido.setLayout(new GridBagLayout());
                 GridBagConstraints gbcCont = new GridBagConstraints();
                 gbcCont.insets = new Insets(INSET_FINAL, INSET_FINAL, INSET_FINAL, INSET_FINAL);
@@ -923,10 +1054,18 @@ public class PanelGrafico extends JFrame {
 
                 //Se crean los elementos del panelContenido
                 JLabel nombreLabel = new JLabel(gestor.buscarUsuarioPorId(contenidoActual.getIdUsuario()).getUserName());
+                nombreLabel.setFont(buttonFont);
+                nombreLabel.setForeground(rosaTexto);
                 JLabel tituloLabel = new JLabel(contenidoActual.getTitulo());
+                tituloLabel.setFont(buttonFont);
+                tituloLabel.setForeground(rosaTexto);
                 JLabel estadoLabel = new JLabel(String.valueOf((contenidoActual.getEstado())));
+                estadoLabel.setFont(buttonFont);
+                estadoLabel.setForeground(rosaTexto);
 
                 JLabel likeLabel = new JLabel("LIKES: " + gestor.retornarCantidadLikes(contenidoActual));
+                likeLabel.setFont(buttonFont);
+                likeLabel.setForeground(rosaTexto);
 
                 JTextArea contenidoArea = new JTextArea();
                 contenidoArea.setLineWrap(true);  // Habilita el salto de línea automático
@@ -942,7 +1081,9 @@ public class PanelGrafico extends JFrame {
                 likeButton.setIcon(corazon);
                 comentariosButton.setIcon(comment);
                 //Creacion del boton de DAR DE BAJA (tiene que ser solo visible para Administrador)
-                JButton activoButton = new JButton("ACTIVAR - DESACTIVAR");
+                JButton activoButton = new JButton("DESACTIVAR");
+                activoButton.setFont(buttonFont);
+                activoButton.setForeground(rosaTexto);
 
 
                 //Se crea un Runnable para poder actualizar los comentarios cuando se escriba uno nuevo
@@ -960,13 +1101,18 @@ public class PanelGrafico extends JFrame {
                             //Se crea un panel para almacenar individualmente los comentarios
                             //Se crea dentro de un bucle para poder generar un panel individual por cada comentario de cada contenido
                             JPanel panelComentarioIndividual = new JPanel(new GridBagLayout());
+                            panelComentarioIndividual.setBackground(rosaPersonalizado);
                             GridBagConstraints gbcComentario = new GridBagConstraints();
                             gbcComentario.insets = new Insets(5, 5, 5, 5);
                             gbcComentario.anchor = GridBagConstraints.WEST;
 
                             //Se crean los elementos del panel individual
                             JLabel comentarioUsuarioLabel = new JLabel(gestor.buscarUsuarioPorId(comentario.getIdUsuario()).getUserName() + ": ");
+                            comentarioUsuarioLabel.setFont(buttonFont);
+                            comentarioUsuarioLabel.setForeground(rosaTexto);
                             JButton desactivarComentarioUsuario = new JButton("DESACTIVAR");
+                            desactivarComentarioUsuario.setFont(buttonFont);
+                            desactivarComentarioUsuario.setForeground(rosaTexto);
                             JTextArea comentarioArea = new JTextArea(comentario.getComentario());
                             JSeparator separatorComentarios = new JSeparator();
                             comentarioUsuarioLabel.setPreferredSize(new Dimension(150,20));
@@ -1113,6 +1259,8 @@ public class PanelGrafico extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         contenidoActual.cambiarEstado();
                         estadoLabel.setText(contenidoActual.getEstado().toString());
+                        if(contenidoActual.getEstado()==Estado.INACTIVO) {activoButton.setText("ACTIVAR");
+                        }else{activoButton.setText("DESACTIVAR");}
                     }
                 });
 
@@ -1154,10 +1302,12 @@ public class PanelGrafico extends JFrame {
 
         //agregamos el scrollPane con el panel principal a un contenedor para juntarlo con el boton de salir
         JPanel container = new JPanel(new BorderLayout());
+        container.setBackground(rosaPersonalizado);
         container.add(scrollPane, BorderLayout.CENTER);
 
         // Agregar el botón de salir en la parte superior izquierda del contenedor
         JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(rosaPersonalizado);
         topPanel.add(salirButton, BorderLayout.WEST);
         container.add(topPanel, BorderLayout.NORTH);
 
@@ -1174,7 +1324,7 @@ public class PanelGrafico extends JFrame {
 
     public void menuVerMiInfo() { //Menu para ver informacion como usuario
         //Creamos y seteamos la configuracion del panel
-        JPanel panelVerMiInfo = new JPanel();
+        PanelConImagen panelVerMiInfo = new PanelConImagen(false);
         panelVerMiInfo.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(INSET_FINAL, INSET_FINAL, INSET_FINAL, INSET_FINAL);
@@ -1182,9 +1332,20 @@ public class PanelGrafico extends JFrame {
 
         //Creamos los elementos del panel
         JLabel userNameLabel = new JLabel("NOMBRE DE USUARIO:");
+        userNameLabel.setFont(buttonFont);
+        userNameLabel.setForeground(rosaTexto);
+
         JLabel passwordLabel = new JLabel("CONTRASEÑA:");
+        passwordLabel.setFont(buttonFont);
+        passwordLabel.setForeground(rosaTexto);
+
         JLabel mailLabel = new JLabel("CORREO ELECTRÓNICO:");
+        mailLabel.setFont(buttonFont);
+        mailLabel.setForeground(rosaTexto);
+
         JLabel preferenciasLabel = new JLabel("PREFERENCIAS:");
+        preferenciasLabel.setFont(buttonFont);
+        preferenciasLabel.setForeground(rosaTexto);
 
         JTextArea userNameArea = new JTextArea();
         JTextArea passwordArea = new JTextArea();
@@ -1208,7 +1369,7 @@ public class PanelGrafico extends JFrame {
         preferenciasArea.setText(preferenciasText.toString());
 
         JButton salirButton = new JButton("SALIR");
-        JButton modificarInfoButton = new JButton("MODIFICAR INFORMACIÓN");
+        JButton modificarInfoButton = new JButton("MODIFICAR INFO");
 
         //Definimos las dimensiones de los elementos
         Dimension fieldSize = new Dimension(FIELD_WIDTH, FIELD_HEIGHT);
@@ -1220,6 +1381,16 @@ public class PanelGrafico extends JFrame {
         salirButton.setPreferredSize(buttonSize);
         modificarInfoButton.setPreferredSize(buttonSize);
         preferenciasArea.setPreferredSize(new Dimension(BUTTON_WIDTH,120));
+        // Configuración de la fuente y color de texto para los botones
+        salirButton.setFont(buttonFont);
+        modificarInfoButton.setFont(buttonFont);
+
+        salirButton.setForeground(rosaTexto);
+        modificarInfoButton.setForeground(rosaTexto);
+
+        // Configuración del fondo blanco para los botones
+        salirButton.setBackground(Color.WHITE);
+        modificarInfoButton.setBackground(Color.WHITE);
 
         // Posiciones de los elementos en el panel
         gbc.gridx = 0;
@@ -1288,8 +1459,7 @@ public class PanelGrafico extends JFrame {
     }
 
     public void menuModifInfo() { //Menu modificar informacion como usuario
-        //Creamos y seteamos la configuracion del panel
-        JPanel panelModificarInfo = new JPanel();
+        PanelConImagen panelModificarInfo = new PanelConImagen(false);
         panelModificarInfo.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(INSET_FINAL, INSET_FINAL, INSET_FINAL, INSET_FINAL);
@@ -1297,9 +1467,20 @@ public class PanelGrafico extends JFrame {
 
         //Creamos los elementos del panel
         JLabel userNameLabel = new JLabel("NOMBRE DE USUARIO:");
+        userNameLabel.setFont(buttonFont);
+        userNameLabel.setForeground(rosaTexto);
+
         JLabel passwordLabel = new JLabel("CONTRASEÑA:");
+        passwordLabel.setFont(buttonFont);
+        passwordLabel.setForeground(rosaTexto);
+
         JLabel mailLabel = new JLabel("CORREO ELECTRÓNICO:");
+        mailLabel.setFont(buttonFont);
+        mailLabel.setForeground(rosaTexto);
+
         JLabel preferenciasLabel = new JLabel("PREFERENCIAS:");
+        preferenciasLabel.setFont(buttonFont);
+        preferenciasLabel.setForeground(rosaTexto);
 
         JTextField userNameField = new JTextField();
         JTextField passwordField = new JTextField();
@@ -1317,6 +1498,11 @@ public class PanelGrafico extends JFrame {
         preferenciasArea.setText(preferenciasText[0].toString());
 
         JComboBox<Categoria> preferenciasComboBox = new JComboBox<>(Categoria.values());
+        preferenciasComboBox.setFont(buttonFont);
+        preferenciasComboBox.setForeground(rosaTexto);
+
+        // Configuración del fondo blanco para el JComboBox
+        preferenciasComboBox.setBackground(Color.WHITE);
         preferenciasComboBox.setBounds(200, 310, 150, 30);
 
         JButton agregarEliminarButton = new JButton("AGREGAR/ELIMINAR");
@@ -1334,6 +1520,19 @@ public class PanelGrafico extends JFrame {
         guardarButton.setPreferredSize(buttonSize);
         salirButton.setPreferredSize(buttonSize);
         preferenciasArea.setPreferredSize(new Dimension(BUTTON_WIDTH,120));
+
+        agregarEliminarButton.setFont(buttonFont);
+        guardarButton.setFont(buttonFont);
+        salirButton.setFont(buttonFont);
+
+        agregarEliminarButton.setForeground(rosaTexto);
+        guardarButton.setForeground(rosaTexto);
+        salirButton.setForeground(rosaTexto);
+
+        // Configuración del fondo blanco para los botones
+        agregarEliminarButton.setBackground(Color.WHITE);
+        guardarButton.setBackground(Color.WHITE);
+        salirButton.setBackground(Color.WHITE);
 
         // Posiciones de los elementos en el panel
         gbc.gridx = 0;gbc.gridy = 0;gbc.anchor = GridBagConstraints.WEST;panelModificarInfo.add(userNameLabel, gbc);
@@ -1426,4 +1625,6 @@ public class PanelGrafico extends JFrame {
             }
         });
     }
+
+
 }

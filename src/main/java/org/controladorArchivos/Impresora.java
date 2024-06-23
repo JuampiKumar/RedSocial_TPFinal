@@ -20,7 +20,7 @@ public abstract class Impresora {
     //public static final String DEFAULT_PATH = "C:/Users/yahve/Downloads/RedSocial_TPFinal/RedSocial_TPFinal";
     //public static final String DEFAULT_PATH = Paths.get(System.getProperty("user.home"), "Desktop", "RedSocial_TPFinal").toString();
     //public static final String DEFAULT_PATH = "C:/Users/juanp/Desktop/VERSION NUEVA/RedSocial_TPFinal/RedSocial_TPFinal";
-    public static final String DEFAULT_PATH = "C:/Users/yahve/OneDrive/Desktop/RedSocial_TPFinal";
+    public static final String DEFAULT_PATH = "C:/Users/joshu/Desktop/TPFINAL/RedSocial_TPFinal";
     public abstract String imprimirUsuario(List<Usuario> usuarios, String path) throws IOException;
 
     public abstract List<Usuario> leerUsuario(String path) throws IOException;
