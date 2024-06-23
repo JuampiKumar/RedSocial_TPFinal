@@ -188,6 +188,14 @@ public class Usuario implements Serializable, IEstado{
         return false;
     }
 
+    @Override
+    public void cambiarEstado() {
+        if (this.getEstado() == Estado.ACTIVO) {
+            this.desactivar();
+        }else{
+            this.activar();
+        }
+    }
 
     // ESTO SOLIA SER UNA INTERFAZ
 

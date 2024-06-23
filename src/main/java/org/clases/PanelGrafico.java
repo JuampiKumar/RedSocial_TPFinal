@@ -498,9 +498,7 @@ public class PanelGrafico extends JFrame {
                     int option = JOptionPane.showOptionDialog(null, user.toString() + "\nESTADO: " + user.getEstado() + "\nContenido publicado: " + user.getPublicados(), "Opciones de Usuario", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
                     if (option == 1) {
-                        if (user.getEstado() == Estado.ACTIVO) {
-                            user.desactivar();
-                        } else user.activar();
+                        user.cambiarEstado();
                         JOptionPane.showMessageDialog(null, "Usuario " + user.getEstado());
                         SwingUtilities.invokeLater(() -> {
                             actualizarUsuarios.run();
@@ -619,9 +617,7 @@ public class PanelGrafico extends JFrame {
                     int option = JOptionPane.showOptionDialog(null, scrollPane, "Opciones de Contenido", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
                     if (option == 1) {
-                        if (contenidoBuscado.getEstado() == Estado.ACTIVO) {
-                            contenidoBuscado.desactivar();
-                        } else contenidoBuscado.activar();
+                        contenidoBuscado.cambiarEstado();
                         JOptionPane.showMessageDialog(null, "Cotenido " + contenidoBuscado.getEstado());
                         SwingUtilities.invokeLater(() -> {
                             actualizarContenidos.run();
@@ -740,9 +736,7 @@ public class PanelGrafico extends JFrame {
                     int option = JOptionPane.showOptionDialog(null, scrollPane, "Opciones de Comentario", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
                     if (option == 1) {
-                        if (comentarioBuscado.getEstado() == Estado.ACTIVO) {
-                            comentarioBuscado.desactivar();
-                        } else comentarioBuscado.activar();
+                        comentarioBuscado.cambiarEstado();;
                         JOptionPane.showMessageDialog(null, "Comentario " + comentarioBuscado.getEstado());
                         SwingUtilities.invokeLater(() -> {
                             actualizarComentarios.run();
@@ -1016,11 +1010,10 @@ public class PanelGrafico extends JFrame {
                             desactivarComentarioUsuario.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    if(comentario.getEstado() == Estado.ACTIVO){
-                                        comentario.desactivar();
+                                    comentario.cambiarEstado();
+                                    if(comentario.getEstado() == Estado.INACTIVO){
                                         desactivarComentarioUsuario.setText("    ACTIVAR    ");
-                                    }else if(comentario.getEstado() == Estado.INACTIVO){
-                                        comentario.activar();
+                                    }else if(comentario.getEstado() == Estado.ACTIVO){
                                         desactivarComentarioUsuario.setText("DESACTIVAR");
                                     }
                                 }
@@ -1036,7 +1029,6 @@ public class PanelGrafico extends JFrame {
                 likeButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         gestor.likeDisLikeContenido(usuario, contenidoActual);
-                        System.out.println(contenidoActual);
                         likeLabel.setText("LIKES: " + gestor.retornarCantidadLikes(contenidoActual));
                     }
                 });
@@ -1062,45 +1054,6 @@ public class PanelGrafico extends JFrame {
                 contenidoArea.setPreferredSize(new Dimension(AREA_WIDTH, AREA_HEIGHT));
 
                 //Se agregan al panel de contenido los elementos
-//                gbcCont.gridx = 0;
-//                gbcCont.gridy = 0;
-//                gbcCont.gridwidth = 2;
-//                gbcCont.anchor = GridBagConstraints.CENTER;
-//                panelContenido.add(tituloLabel, gbcCont);
-//
-//                gbcCont.gridx = 0;
-//                gbcCont.gridy = 1;
-//                panelContenido.add(nombreLabel, gbcCont);
-//
-//                gbcCont.anchor = GridBagConstraints.EAST;
-//                gbcCont.gridx = 1;
-//                gbcCont.gridy = 1;
-//                panelContenido.add(estadoLabel, gbcCont);
-//
-//                gbcCont.anchor = GridBagConstraints.CENTER;
-//
-//                gbcCont.gridx = 0;
-//                gbcCont.gridy = 2;
-//                panelContenido.add(contenidoArea, gbcCont);
-//
-//                gbcCont.anchor = GridBagConstraints.WEST;
-//                gbcCont.gridx = 0;
-//                gbcCont.gridy = 3;
-//                panelContenido.add(likeLabel, gbcCont);
-//
-//                gbcCont.gridx = 1;
-//                gbcCont.gridy = 4;
-//                gbcCont.anchor = GridBagConstraints.EAST;
-//                panelContenido.add(comentariosButton, gbcCont);
-//
-//                gbcCont.anchor = GridBagConstraints.WEST;
-//                gbcCont.gridx = 0;
-//                panelContenido.add(likeButton, gbcCont);
-//
-//                gbcCont.anchor = GridBagConstraints.CENTER;
-//                gbcCont.gridx = 0;
-//                panelContenido.add(activoButton, gbcCont);
-
                 gbcCont.gridx = 0;
                 gbcCont.gridy = 0;
                 gbcCont.gridwidth = 3;
@@ -1158,11 +1111,7 @@ public class PanelGrafico extends JFrame {
                 activoButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if(contenidoActual.getEstado() == Estado.ACTIVO){
-                            contenidoActual.desactivar();
-                        }else if(contenidoActual.getEstado() == Estado.INACTIVO){
-                            contenidoActual.activar();
-                        }
+                        contenidoActual.cambiarEstado();
                         estadoLabel.setText(contenidoActual.getEstado().toString());
                     }
                 });

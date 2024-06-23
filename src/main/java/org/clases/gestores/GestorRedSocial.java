@@ -11,6 +11,7 @@ import org.clases.clasesContenido.Contenido;
 import org.clases.clasesContenido.ContenidoInteractivo;
 import org.clases.clasesContenido.ContenidoNoInteractivo;
 import org.excepciones.ErrorValidacionException;
+import org.interfaces.IEstado;
 
 import java.io.IOException;
 import java.util.*;
@@ -35,41 +36,6 @@ public class GestorRedSocial {
     }
 
     //Metodos
-    public void cargarDatosARedSocial(){
-        Random random = new Random();
-        Faker faker = new Faker();
-        Integer ran = 0;
-        Integer ran2 = 0;
-        Contenido contenidoAux;
-        for(int i = 0; i < 10; i++){
-            Usuario usuario = new Usuario(faker.funnyName().name(), faker.funnyName().name(), faker.internet().emailAddress());
-            this.usuarios.add(usuario);
-        }
-        for(int i = 0; i < 25; i++){
-            ran = random.nextInt(10);
-            contenidoAux = new ContenidoInteractivo(faker.book().title(), faker.lorem().sentence(), Categoria.getRandomCategoria(), "U" + ran.toString());
-            agregarContenido(contenidoAux);
-            agregarPublicacionAUsuario(buscarUsuarioPorId("U" + ran.toString()), contenidoAux);
-
-            ran = random.nextInt(10);
-            contenidoAux = new ContenidoNoInteractivo(faker.book().title(), faker.lorem().sentence(), Categoria.getRandomCategoria(), "U" + ran.toString());
-            agregarContenido(contenidoAux);
-            agregarPublicacionAUsuario(buscarUsuarioPorId("U" + ran.toString()), contenidoAux);
-        }
-
-        for(int i = 0; i < 50; i++){
-            ran = random.nextInt(49);
-            ran2 = random.nextInt(9);
-            agregarComentario(buscarUsuarioPorId("U" + ran2.toString()), buscarContenidoPorId("C" + ran.toString()), faker.lorem().sentence() + " " + faker.funnyName().name());
-        }
-
-        for(int i = 0; i < 80; i++){
-            ran = random.nextInt(48);
-            ran2 = random.nextInt(8);
-            likeDisLikeContenido(buscarUsuarioPorId("U" + ran2.toString()), buscarContenidoPorId("C" + ran.toString()));
-        }
-    }
-
     public void registrarUsuarioNuevo(String userName, String passWord, String correo) throws ErrorValidacionException {
         if (!validarMail(correo)) {
             throw new ErrorValidacionException("Correo electrónico no válido.");
@@ -96,6 +62,9 @@ public class GestorRedSocial {
     public Usuario encontrarUsuario(String userName, String passWord) throws ErrorValidacionException {
         for(Usuario usuario : this.usuarios){
             if(usuario.getUserName().equals(userName) && usuario.getPassword().equals(passWord)){
+                if(usuario.getEstado() == Estado.INACTIVO){
+                    throw new ErrorValidacionException("Usuario dado de baja.");
+                }
                 return usuario;
             }
         }
@@ -106,7 +75,6 @@ public class GestorRedSocial {
         boolean flag = false;
         if(contenido != null) {
             this.contenidos.add(contenido);
-            System.out.println(this.contenidos);
         }
         return flag;
     }
@@ -190,28 +158,6 @@ public class GestorRedSocial {
         }
     }
 
-//    public <T extends IIdentificable> T buscarPorId(String id) {
-//        Stream<? extends IIdentificable> stream = null;
-//
-//        switch (id.charAt(0)) {
-//            case 'U':
-//                stream = this.usuarios.stream();
-//                break;
-//            case 'C':
-//                stream = this.contenidos.stream();
-//                break;
-//            case 'M':
-//                stream = this.comentarios.stream();
-//                break;
-//        }
-//
-//        if (stream != null) {
-//            Optional<? extends IIdentificable> result = stream.filter(item -> item.getId().equals(id)).findFirst();
-//            return result.orElse(null);
-//        }
-//        return null;
-//    }
-
     public Usuario buscarUsuarioPorId(String dato) {
         Optional<Usuario> result = usuarios.stream().filter(item -> item.getIdUsuario().equalsIgnoreCase(dato) || item.getUserName().equalsIgnoreCase(dato)).findFirst();
         return result.orElse(null);
@@ -249,7 +195,6 @@ public class GestorRedSocial {
             impresoraJSON.imprimirComentario(this.comentarios, DEFAULT_PATH + "/comentarios.json");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Ha ocurrido un error al guardar los datos en JSON.");
         }
     }
 

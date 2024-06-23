@@ -1,7 +1,9 @@
 package org.interfaces;
 
-public interface IEstado {
+import org.enumeradores.Estado;
 
+public interface IEstado {
+    public void cambiarEstado();
     public boolean activar();
 
     public boolean desactivar();

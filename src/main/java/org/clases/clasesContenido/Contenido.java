@@ -133,7 +133,6 @@ public abstract class Contenido implements Comparable<Contenido>, Serializable, 
     public int compareTo(Contenido o) {
         Integer numero = Integer.parseInt(this.idContenido.substring(1));
         Integer numero2 = Integer.parseInt(o.idContenido.substring(1));
-        System.out.println(numero);
         return numero2.compareTo(numero);
     }
 

@@ -97,4 +97,13 @@ public class Comentario implements Serializable, IEstado {
                 ". ID Contenido: " + getIdContenido() +
                 ". " + getComentario();
     }
+
+    @Override
+    public void cambiarEstado() {
+        if (this.getEstado() == Estado.ACTIVO) {
+            this.desactivar();
+        }else{
+            this.activar();
+        }
+    }
 }

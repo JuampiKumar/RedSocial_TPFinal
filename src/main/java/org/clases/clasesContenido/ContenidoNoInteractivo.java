@@ -46,6 +46,15 @@ public class ContenidoNoInteractivo extends Contenido implements IEstado {
     }
 
     @Override
+    public void cambiarEstado() {
+        if (this.getEstado() == Estado.ACTIVO) {
+            this.desactivar();
+        }else{
+            this.activar();
+        }
+    }
+
+    @Override
     public String toString() {
         return "No interactivo" +
                 ". ID: " + getIdContenido() +
