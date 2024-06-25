@@ -1505,7 +1505,7 @@ public class PanelGrafico extends JFrame {
         preferenciasComboBox.setBackground(Color.WHITE);
         preferenciasComboBox.setBounds(200, 310, 150, 30);
 
-        JButton agregarEliminarButton = new JButton("AGREGAR/ELIMINAR");
+        JButton agregarEliminarButton = new JButton("SELECCIONAR");
         JButton guardarButton = new JButton("GUARDAR");
         JButton salirButton = new JButton("SALIR");
 
